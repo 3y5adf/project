@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <!-- VUE 문법을 사용하려면 이게 필수 -->
+         <!-- $가 붙으면 JQUERY -->
+    <style>
+        table, tr, td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+            text-align: center;
+        }
+        th{
+            background-color: beige;
+        }
+        tr:nth-child(even){
+            background-color: azure;
+        }
+        #pageSizeSelect{
+            margin-bottom: 10px;
+            margin-right: 10px;
+        }
+        .index{
+            margin-top: 10px;
+            margin-right: 10px;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+        <select name="" id="pageSizeSelect" v-model="pageSize" @change="fnMemberList">
+            <option value="5">5개씩</option>
+            <option value="10">10개씩</option>
+            <option value="15">15개씩</option>
+            <option value="20">20개씩</option>
+        </select>
+        <button @click="fnHome">HOME</button>
+        <table>
+            <tr>
+                <th>회원번호</th>
+                <th>이름</th>
+                <th>닉네임</th>
+                <th>생년월일</th>
+                <th>이메일</th>
+                <th>ID</th>
+                <th>등급</th>
+            </tr>
+            <tr v-for="item in list">
+                <td>{{item.MEMBER_NUM}}</td>
+                <td>{{item.MEMBER_NAME}}</td>
+                <td>{{item.NICKNAME}}</td>
+                <td>{{item.BIRTHDAY}}</td>
+                <td>{{item.EMAIL}}</td>
+                <td>{{item.ID}}</td>
+                <td>{{item.STATUS}}</td>
+            </tr>
+        </table>
+        <a class="index" href="javascript:;" v-for="num in index" @click="fnPageChange(num)">
+            <span v-if="num == page" style="color: blue;">{{num}}</span>
+            <span v-else>{{num}}</span>
+        </a>
+        
+    </div>
+</body>
+</html>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                    // 변수 선언 부분
+                list : [],
+                pageSize : 5,
+                page : 1,
+                index : 0
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+                // 함수는 여기서만
+            fnMemberList: function () {
+                let self = this;
+                let param = {
+                    pageSize : self.pageSize,
+                    offset : (self.page-1)*self.pageSize //일단은 0
+                };
+                $.ajax({
+                    url: "http://localhost:3009/member/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.count);
+                        console.log(self.pageSize);
+                        console.log(Math.ceil(data.count/self.pageSize));
+                        self.list = data.list;
+                        self.index = Math.ceil(data.count/self.pageSize);
+                        
+                    }
+                });
+            },
+
+            fnPageChange : function (num) {
+                let self = this;
+                self.page = num;
+                self.fnMemberList();
+            },
+
+            fnHome : function () {
+                location.href="Main.html";
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+            self.fnMemberList();
+        }
+    });
+
+    app.mount('#app');
+</script>

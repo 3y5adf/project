@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <!-- VUE 문법을 사용하려면 이게 필수 -->
+         <!-- $가 붙으면 JQUERY -->
+    <style>
+        #container{
+            width: 1000px;
+            margin: 0px auto;
+        }
+        .box{
+            border: 1px solid rgb(35, 35, 35);
+            width: 475px;
+            height: 800px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .FloatLeft{
+            float: left;
+            margin: 10px;
+        }
+        .FloatRight{
+            float: right;
+            margin: 10px;
+        }
+        #webTB{
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../media/나혼렙.webp);
+        }
+        #webTB:hover{
+            cursor: pointer;
+            background-image: url(../media/나혼렙.webp);
+        }
+        p{
+            font-size: 100px;
+            color: white;
+        }
+        #book{
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../media/Books___.jpg);
+        }
+        #book:hover{
+            cursor: pointer;
+            background-image: url(../media/Books___.jpg);
+        }
+        .sign{
+            text-align: center;
+        }
+        .sign button{
+            width: 200px;
+            height: 50px;
+            margin: 10px;
+            font-size: 25px;
+            border-radius: 10px;
+        }
+        .sign button:hover{
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+            color: white;
+            cursor: pointer;
+        }
+        .nickname{
+            text-decoration: none;
+            color: white;
+        }
+        .nickname:hover{
+            color:bisque
+        }
+        .adminOption button{
+            width: 100px;
+            height: 50px;
+            font-size: 20px;
+        }
+        
+    </style>
+</head>
+<body style="background-color: rgb(35, 35, 35);">
+    <div id="app">
+        <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+        <div id="container">
+            <div id="webTB" class="box FloatLeft" @click="fnWebTB">
+                <p>웹툰<br>웹소설</p>
+            </div>
+            <div id="book" class="box FloatRight" @click="fnBook">
+                <p>서적</p>
+            </div>
+            <div class="sign" v-if="userId.length==0">
+                <button @click="fnSignIn">회원가입</button>
+                <button @click="fnLogin">로그인</button>
+            </div>
+            <div class="sign" v-if="userId.length!=0">
+                <div>
+                    <span style="color: white;">
+                        <h2>어서오십시오</h2>
+                    </span>
+                </div>
+                <div>
+                    <span style="color: white;">
+                        <a class="nickname" href="javascript:;" @click="fnView(list[0].MEMBER_NUM)" v-if="list.length > 0">
+                            {{list[0].NICKNAME}}
+                        </a> 님
+                    </span>
+                </div>
+                <button class="logout" @click="fnLogout">로그아웃</button>
+                <div class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
+                    <button @click="fnManage">유저 관리</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                    // 변수 선언 부분
+                userId : "",
+                list : []
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+                // 함수는 여기서만
+            fnLoginMember: function (userId) {
+                let self = this;
+                let param = {
+                    userId : sessionStorage.getItem('userId')
+                };
+                $.ajax({
+                    url: "http://localhost:3009/member/loginUser",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data)
+                        self.list = data.list;
+                        console.log(self.list)
+                    }
+                });
+            },
+
+            fnWebTB: function () {
+                location.href="Main-webTB.html"
+            },
+
+            fnBook: function () {
+                location.href="Main-book.html"
+            },
+
+            fnSignIn: function () {
+                location.href="SignIn.html"
+            }, 
+
+            fnLogin: function () {
+                location.href="Login.html"
+            },
+
+            fnView : function(MEMBER_NUM){
+                location.href="userView.html?memberNum="+MEMBER_NUM;
+            },
+
+            fnLogout : function () {
+                sessionStorage.removeItem('userId');
+                location.href="Main.html";
+            },
+
+            fnManage : function () {
+                location.href="memberManage.html";
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+
+            self.userId = sessionStorage.getItem('userId');
+
+            self.fnLoginMember();
+
+            console.log(self.userId);
+        }
+    });
+
+    app.mount('#app');
+</script>
