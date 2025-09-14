@@ -21,49 +21,118 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        #container{
+            width: 1000px;
+            margin: 10px auto;
+
+            border: 1px solid black;
+        }
+        .head{
+            width: 100%;
+            height: 100px;
+
+            border: 1px solid black;
+        }
+        .SignIn{
+            width: 100%;
+            height: 300px;
+            margin: 10px auto;
+            text-align: center;
+
+            border: 1px solid black;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
-        <div>
-            이름 : 
-            <input type="text" name="" id="" v-model="userName">
-        </div>
-        <div>
-            생년월일 : 
-            <input type="date" name="" id="" v-model="userBirth">
-        </div>
-        <div>
-            전화번호 : 
-            <input type="text" v-model="userPhone">
-        </div>
-        <div>
-            이메일 : 
-            <input type="text" v-model="userEmail">
-        </div>
-        <div>
-            아이디 : 
-            <input type="text" name="" id="" v-model="userId">
-            <button @click="fnIdCheck">중복확인</button>
-        </div>
-        <div>
-            비밀번호 : 
-            <input type="password" name="" id="" v-model="userPwd">
-        </div>
-        <div>
-            비밀번호 확인 : 
-            <input type="password" name="" id="" v-model="userPwdCheck">
-            <button>확인</button>
-        </div>
-        <div>
-            선호장르를 선택해주세요.
-            <div>
-                <label><input type="checkbox" v-model="userGenre">액션</label>
-                <label><input type="checkbox" v-model="userGenre">판타지</label>
-                <label><input type="checkbox" v-model="userGenre">로맨스</label>
-                <label><input type="checkbox" v-model="userGenre">스릴러</label>
+        <div id="container">
+            <div class="head">
+
             </div>
+            <div class="SignIn">
+                <div>
+                    이름 :
+                    <input type="text" name="" id="" v-model="userName">
+                </div>
+                <div>
+                    생년월일 :
+                    <input type="date" name="" id="" v-model="userBirth">
+                </div>
+                <div>
+                    전화번호 :
+                    <input type="text" v-model="userPhone">
+                </div>
+                <div>
+                    이메일 :
+                    <input type="text" v-model="userEmail">
+                </div>
+                <div>
+                    아이디 :
+                    <input type="text" name="" id="" v-model="userId">
+                    <button @click="fnIdCheck">중복확인</button>
+                </div>
+                <div>
+                    비밀번호 :
+                    <input type="password" name="" id="" v-model="userPwd">
+                </div>
+                <div>
+                    비밀번호 확인 :
+                    <input type="password" name="" id="" v-model="userPwdCheck">
+                    <button>확인</button>
+                </div>
+                <div>
+                    선호장르를 선택해주세요.
+                    <div>
+                        <label><input type="checkbox" v-model="userGenre">액션</label>
+                        <label><input type="checkbox" v-model="userGenre">판타지</label>
+                        <label><input type="checkbox" v-model="userGenre">로맨스</label>
+                        <label><input type="checkbox" v-model="userGenre">스릴러</label>
+                    </div>
+                </div>
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                    <td>
+                        <input type="text" name="" id="">
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </body>
