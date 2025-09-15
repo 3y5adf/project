@@ -26,12 +26,37 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
-        <div v-if="list.length > 0" v-for="item in list">
-            {{ item.GENRE_NAME }}
-            <input type="checkbox" v-model="genreList" id="{{item.GENRE_NUM}}">
-        </div>
-        <div>
 
+        <div>
+            <!-- 장르 - 체크박스 -->
+            번역상태 - 라디오 or 셀렉트
+            <!-- 국가 - 셀렉트 -->
+            타입 - 라디오 or 셀렉트
+            <!-- 카테고리 - 체크박스 -->
+        </div>
+
+        <div v-if="listGenre.length > 0" v-for="item in listGenre">
+            {{ item.GENRE_NAME }}, {{item.GENRE_NUM}}
+            <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM">
+        </div>
+
+        <hr>
+
+        <div v-if="listCategory.length > 0" v-for="item in listCategory">
+            {{ item.CATEGORY_NAME }}, {{item.CATEGORY_NUM}}
+            <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+        </div>
+
+        <hr>
+
+        <div>
+            <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
+                <option :value="item.COUNTRY_NAME"  v-if="listCountry.length > 0" v-for="item in listCountry">{{item.COUNTRY_NAME}}</option>
+            </select>
+        </div>
+
+        <div>
+            <button @click="fnCheck">btn</button>
         </div>
         <!-- <div>
             <div v-if="list.length > 0" v-for="item in list">
@@ -49,9 +74,18 @@
             return {
                 // 변수 - (key : value)
                     // 변수 선언 부분
-                list : []
+                listGenre : [], //클라이언트에서 만든 리스트
+                genreList : [], //서버에서 오는 리스트
+
+                listCategory : [], //클라이언트에서 만든 리스트
+                categoryList : [], //서버에서 오는 리스트
+
+                listCountry : [], //클라이언트에서 만든 리스트
+                countryList : [], //서버에서 오는 리스트
+                countryPick : "국내"
             };
         },
+        
         methods: {
             // 함수(메소드) - (key : function())
                 // 함수는 여기서만
@@ -79,19 +113,70 @@
                     data: param,
                     success: function (data) {
                         // console.log(data.list);
-                        self.list = data.list;
-                        console.log(self.list);
-                        console.log(self.list.length);
-                        console.log(self.list[0]);
-                        console.log(self.list[0].GENRE_NAME);
+                        self.listGenre = data.genreList;
+                        console.log(self.listGenre);
+                        console.log(self.listGenre.length);
+                        console.log(self.listGenre[0]);
+                        console.log(self.listGenre[0].GENRE_NAME);
                     }
                 });
+            },
+
+            fnCategoryList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/category/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.listCategory = data.categoryList;
+                        console.log(self.listCategory);
+                        console.log(self.listCategory.length);
+                        console.log(self.listCategory[0]);
+                        console.log(self.listCategory[0].CATEGORY_NAME);
+                    }
+                });
+            },
+
+            fnCountryList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/country/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.listCountry = data.countryList;
+                        console.log(self.listCountry);
+                        console.log(self.listCountry.length);
+                        console.log(self.listCountry[0]);
+                        console.log(self.listCountry[0].COUNTRY_NAME);
+                    }
+                });
+            },
+
+            fnCountry:function (country){
+                console.log(country);
+            },
+
+            fnCheck : function() {
+                let self = this;
+                console.log(self.genreList);
+                console.log(self.categoryList);
+                console.log(self.countryPick);
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
             self.fnGenreList();
+            self.fnCategoryList();
+            self.fnCountryList();
         }
     });
 
