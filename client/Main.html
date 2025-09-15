@@ -167,6 +167,7 @@
 
             fnLogout : function () {
                 sessionStorage.removeItem('userId');
+                sessionStorage.removeItem('userStatus');
                 location.href="Main.html";
             },
 
@@ -179,10 +180,12 @@
             let self = this;
 
             self.userId = sessionStorage.getItem('userId');
+            self.userStatus = sessionStorage.getItem('userStatus');
 
             self.fnLoginMember();
 
             console.log(self.userId);
+            console.log(self.userStatus);
         }
     });
 

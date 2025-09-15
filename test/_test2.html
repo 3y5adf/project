@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table with Array Values in TD</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: lightgray;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <table>
+      <thead>
+        <tr>
+          <th>작품 정보</th>
+          <th>작품 번호</th>
+          <th>작가 정보</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in items" :key="item.id">
+          <td>
+            {{ item.bookName }} <br> {{ item.publisher }}
+          </td>
+          <td>{{ item.bookNum }}</td>
+          <td>
+            <!-- 배열을 하나의 문자열로 결합해서 출력 -->
+            {{ item.authors.join(", ") }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const app = Vue.createApp({
+      data() {
+        return {
+          items: [
+            {
+              id: 1,
+              bookName: '소나기',
+              publisher: '문학사',
+              bookNum: 'BOOK_0001',
+              authors: ['황순원', '김유정'],
+            },
+            {
+              id: 2,
+              bookName: '자유론',
+              publisher: '하버드',
+              bookNum: 'BOOK_0002',
+              authors: ['존 스튜어트 밀'],
+            }
+          ]
+        };
+      }
+    });
+
+    app.mount('#app');
+  </script>
+</body>
+</html>

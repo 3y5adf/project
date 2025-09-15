@@ -180,12 +180,73 @@ app.get('/member/list', async (req, res) => {
       `SELECT COUNT(*) FROM PR_MEMBER`
     );
 
-    
 
     res.json({
         result : "success",
         list : rows,
         count : count.rows[0][0]
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/member/signin', async (req, res) => {
+  const { userName, userBirth, userPhone, userEmail, userId, userPwd } = req.query;
+
+  console.log(userName);
+  // console.log(userGenre);
+
+  let query=
+    `INSERT INTO PR_MEMBER(MEMBER_NUM, MEMBER_NAME, BIRTH, PHONE, EMAIL, ID, PASSWORD, STATUS_CODE) `
+  + `VALUES (PR_M_SEQ.NEXTVAL, :userName, TO_DATE(:userBirth, 'YYYYMMDD'), :userPhone, :userEmail, :userId, :userPwd, 9) `;
+  // + `RETURNING MEMBER_NUM INTO :membernum`;
+  
+  console.log(query);
+
+  try {
+    await connection.execute(
+      query,
+    
+      [userName, userBirth, userPhone, userEmail, userId, userPwd],
+      { autoCommit: false }
+    );
+  
+  console.log(userName)
+  console.log(userBirth)
+  console.log(userPhone)
+  console.log(userEmail)
+  console.log(userId)
+  console.log(userPwd)
+    
+
+    res.json({
+        result : "success"
+    });
+  } catch (error) {
+    console.error('Error executing insert', error);
+    res.status(500).send('Error executing insert');
+  }
+});
+
+app.get('/genre/list', async (req, res) => {
+  const { } = req.query;
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_GENRE`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        list : rows
     });
   } catch (error) {
     console.error('Error executing query', error);

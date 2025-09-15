@@ -70,6 +70,8 @@
                         console.log(data)
                         if(data.length>0){
                             sessionStorage.setItem("userId", self.userId);
+                            console.log(data[0].STATUS_CODE);
+                            sessionStorage.setItem("userStatus", data[0].STATUS_CODE);
 
                             alert("로그인되었습니다.");
                             location.href="Main.html";

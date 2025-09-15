@@ -41,6 +41,14 @@
 
             border: 1px solid black;
         }
+        .tableCenter{
+            margin-left: auto;
+            margin-right: auto;
+            width: 500px;
+        }
+        .signInButton{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -48,20 +56,21 @@
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
         <div id="container">
             <div class="head">
-
+                <button @click="fnHome">home</button>
+                해야할 것 : 장르 고른 것들 PR_FAV 테이블에 반복적으로 들어갈 수 있도록 하기. 먼저 넣은 MEMBER_NUM을 뽑아내서 다시 사용
             </div>
             <div class="SignIn">
                 <div>
                     이름 :
-                    <input type="text" name="" id="" v-model="userName">
+                    <input type="text" v-model="userName">
                 </div>
                 <div>
                     생년월일 :
-                    <input type="date" name="" id="" v-model="userBirth">
+                    <input type="text" v-model="userBirth" placeholder="ex)19970831">
                 </div>
                 <div>
                     전화번호 :
-                    <input type="text" v-model="userPhone">
+                    <input type="text" v-model="userPhone" placeholder="ex)01053152468">
                 </div>
                 <div>
                     이메일 :
@@ -69,70 +78,80 @@
                 </div>
                 <div>
                     아이디 :
-                    <input type="text" name="" id="" v-model="userId">
+                    <input type="text" v-model="userId">
                     <button @click="fnIdCheck">중복확인</button>
                 </div>
                 <div>
                     비밀번호 :
-                    <input type="password" name="" id="" v-model="userPwd">
+                    <input type="password" v-model="userPwd">
                 </div>
                 <div>
                     비밀번호 확인 :
-                    <input type="password" name="" id="" v-model="userPwdCheck">
-                    <button>확인</button>
+                    <input type="password" v-model="userPwdCheck">
+                    <button @click="fnPwdCheck">확인</button>
                 </div>
                 <div>
                     선호장르를 선택해주세요.
                     <div>
-                        <label><input type="checkbox" v-model="userGenre">액션</label>
-                        <label><input type="checkbox" v-model="userGenre">판타지</label>
-                        <label><input type="checkbox" v-model="userGenre">로맨스</label>
-                        <label><input type="checkbox" v-model="userGenre">스릴러</label>
+                        <label><input type="checkbox" v-model="userGenre" value="액션" id="genreAction">액션</label>
+                        <label><input type="checkbox" v-model="userGenre" value="판타지" id="genereFantasy">판타지</label>
+                        <label><input type="checkbox" v-model="userGenre" value="로맨스" id="genereRomance">로맨스</label>
+                        <label><input type="checkbox" v-model="userGenre" value="코미디" id="genreComedy">코미디</label>
+                        <br>
+                        <label><input type="checkbox" v-model="userGenre" value="드라마" id="genreDrama">드라마</label>
+                        <label><input type="checkbox" v-model="userGenre" value="스포츠" id="genreSports">스포츠</label>
+                        <label><input type="checkbox" v-model="userGenre" value="추리" id="genreReason">추리</label>
+                        <label><input type="checkbox" v-model="userGenre" value="공포" id="genreHorror">공포</label>
+                        <br>
+                        <label><input type="checkbox" v-model="userGenre" value="SF" id="genreSF">SF</label>
                     </div>
                 </div>
             </div>
-            <table>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-            </table>
-            <table>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                    <td>
-                        <input type="text" name="" id="">
-                    </td>
-                </tr>
-            </table>
+            <div >
+                <table class="tableCenter">
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                </table>
+                <table class="tableCenter">
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="" id="">
+                            <input type="text" name="" id="">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="signInButton">
+                <button @click="fnSignIn">회원가입</button>
+            </div>
         </div>
     </div>
 </body>
@@ -151,7 +170,10 @@
                 userId : "",
                 userPwd : "",
                 userPwdCheck : "",
-                userGenre : {}
+                userGenre : [],
+
+                idFlag : false,
+                pwdFlag : false
             };
         },
         methods: {
@@ -166,18 +188,160 @@
                     type: "GET",
                     data: param,
                     success: function (data) {
-
+                        console.log(data.result);
                     }
                 });
             },
 
             fnIdCheck: function () {
+                let self = this;
+
+                if (self.userId.trim() === '') {
+                    alert("아이디를 입력하세요.");
+                    return;  // 빈 칸일 경우 함수 종료
+                }
+
+                const regex = /^[a-z0-9]*$/
+
+                if(regex.test(self.userId)){
+
+                } else {
+                    alert("잘못된 id 형식입니다.");
+                    return;
+                }
+
+                let param = {
+                    userId : self.userId
+                };
+                $.ajax({
+                    url: "http://localhost:3009/member/loginUser",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.list);
+                        console.log(data.list.length);
+
+                        if(data.list.length > 0) {
+                            alert("이미 존재하는 ID입니다.")
+                            return;
+                        }
+                        else{
+                            idFlag = true;
+                            console.log(idFlag);
+                            alert("사용 가능한 ID입니다.");
+                        }
+                    }
+                });
+            },
+
+            fnHome : function () {
+                location.href="Main.html";
+            },
+
+            fnPwdCheck : function () {
+                let self = this;
+                userPwd = self.userPwd;
+                userPwdCheck = self.userPwdCheck;
+
+                console.log(userPwd);
+                console.log(userPwdCheck);
+
+                if(userPwd == userPwdCheck){
+                    pwdFlag=true;
+                    alert("확인되었습니다.");
+                }
+                else{
+                    alert("입력한 비밀번호와 다릅니다.");
+                    return;
+                }
+            },
+
+            fnSignIn : function () {
+                let self = this;
+                if(
+                    self.userName.length==0 ||
+                    self.userBirth.length==0 ||
+                    self.userPhone.length==0 ||
+                    self.userEmail.length==0 ||
+                    self.userId.length==0 ||
+                    self.userPwd.length==0 
+                ){
+                    alert("빈 칸을 채워주세요.");
+                    return;
+                }
+
+                const regex = /^\d+$/;
+
+                if(regex.test(self.userPhone) && self.userPhone.length == 11){
+
+                } else {
+                    alert("정상적인 번호가 아닙니다.");
+                    return;
+                }
+
+                const reg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+
+                if(reg.test(self.userEmail)){
+
+                } else{
+                    alert("이메일을 확인해주세요.");
+                    return;
+                }
+
+                if(idFlag==false && pwdFlag){
+                    alert("id중복 여부 및 비밀번호를 확인해주세요.");
+                    return;
+                }
+                if(idFlag==false) {
+                    alert("id중복 여부를 확인해주세요.");
+                    return;
+                }
+                if(pwdFlag==false) {
+                    alert("비밀번호를 확인해주세요.");
+                    return;
+                }
+
+               
+
+                
+
+                let param = {
+                    userName : self.userName,
+                    userBirth : self.userBirth,
+                    userPhone : self.userPhone,
+                    userEmail : self.userEmail,
+                    userId : self.userId,
+                    userPwd : self.userPwd,
+                    userGenre : self.userGenre
+                };
+
+                console.log(param);
+                console.log(param.userGenre);
+                console.log(param.userGenre[0]);
+                
+                $.ajax({
+                    url: "http://localhost:3009/member/signin",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    traditional : true,
+                    success: function (data) {
+                        // console.log(data);
+                        // console.log(data.list);
+                        // console.log(data.list.length);
+                        alert("회원가입에 성공하였습니다.");
+                    }
+                });
 
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
-            let self = this;
+            idFlag=false;
+            pwdFlag=false;
+
         }
     });
 
