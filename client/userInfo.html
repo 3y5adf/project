@@ -27,20 +27,38 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
         
-        <div v-if="list.length > 0">
-            {{ list[0].NICKNAME }}
-        </div>
-        <div v-if="list.length > 0">
-            {{ list[0].MEMBER_NAME }}
-        </div>
-        <div v-if="list.length > 0">
-            {{ list[0].FORMATTED_BIRTH }}
-        </div>
-        <div v-if="list.length > 0">
-            {{ list[0].EMAIL }}
-        </div>
-        <div v-if="list.length > 0">
-            {{ list[0].PHONE }}
+        <div>
+            <table>
+                <tr>
+                    <th>회원번호</th>
+                    <td>{{memberInfo.MEMBER_NUM}}</td>
+                </tr>
+                <tr>
+                    <th>이름</th>
+                    <td>{{memberInfo.MEMBER_NAME}}</td>
+                </tr>
+                <tr>
+                    <th>닉네임</th>
+                    <td>{{memberInfo.NICKNAME}}</td>
+                </tr>
+                <tr>
+                    <th>생년월일</th>
+                    <td>{{memberInfo.FORMATTED_BIRTH}}</td>
+                </tr>
+                <tr>
+                    <th>이메일</th>
+                    <td>{{memberInfo.EMAIL}}</td>
+                </tr>
+                <tr>
+                    <th>ID</th>
+                    <td>{{memberInfo.ID}}</td>
+                </tr>
+                <tr>
+                    <th>등급</th>
+                    <td>{{memberInfo.STATUS}}</td>
+                </tr>
+            </table>
+            <button @click="fnMemberEdit(memberInfo.MEMBER_NUM)">수정</button>
         </div>
     </div>
 </body>
@@ -53,37 +71,52 @@
                 // 변수 - (key : value)
                     // 변수 선언 부분
                 memberNum : "",
-                list : []
+                memberInfo : {}
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
                 // 함수는 여기서만
-            fnView: function (memberNum) {
+            fnList: function () {
                 let self = this;
-                let param = {
-                    memberNum : self.memberNum
-                };
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+
+                    }
+                });
+            },
+
+            fnView : function (memberNum) {
+                let self = this;
+                let param = {memberNum};
                 $.ajax({
                     url: "http://localhost:3009/member/view",
                     dataType: "json",
                     type: "GET",
                     data: param,
                     success: function (data) {
-                        console.log(data);
-                        self.list = data.list;
-                        console.log(self.list[0].NICKNAME)
+                        console.log(data.list[0]);
+                        self.memberInfo = data.list[0]
                     }
                 });
+            },
+
+            fnMemberEdit : function (memberNum) {
+                location.href="userEdit.html?memberNum="+memberNum;
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
             const queryParams = new URLSearchParams(window.location.search);
-            self.memberNum = queryParams.get('memberNum') || '';
-            console.log(self.memberNum);
-            self.fnView();
+            self.memberNum = queryParams.get('memberNum') || ''; 
+
+            self.fnView(self.memberNum);
         }
     });
 

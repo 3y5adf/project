@@ -21,42 +21,117 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        .box{
+            border: 1px solid black;
+        }
+        .marginRight5px{
+            margin-right: 5px;
+        }
+        .marginTop5px{
+            margin-top: 5px;
+        }
+        .inlineBlock{
+            display: inline-block;
+        }
+        .searchElement{
+            vertical-align : top;
+        }
+        .selectPick{
+            width: 70px;
+        }
+        .checkPick{
+            width: 500px;
+        }
+        .genreCheck{
+            margin: 5px;
+            width: 110px;
+            vertical-align : top;
+        }
+        .categoryCheck{
+            margin-top: 5px;
+            width: 140px;
+            vertical-align : top;
+        }
+        .countrySelect{
+            vertical-align : top;
+        }
+        .translatedSelect{
+            vertical-align : top;
+        }
+        .typeSelect{
+            vertical-align : top;
+        }
+        .searchList{
+            margin: 10px;
+        }
+        input.fnGenreChecked> genreList {
+            border: 4px solid rgb(255, 242, 65);
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
 
-        <div>
-            <!-- 장르 - 체크박스 -->
-            번역상태 - 라디오 or 셀렉트
-            <!-- 국가 - 셀렉트 -->
-            타입 - 라디오 or 셀렉트
-            <!-- 카테고리 - 체크박스 -->
-        </div>
-
-        <div v-if="listGenre.length > 0" v-for="item in listGenre">
-            {{ item.GENRE_NAME }}, {{item.GENRE_NUM}}
-            <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM">
+        <div class="searchElement box">
+            <div class="genreCheck box inlineBlock marginRight5px">
+                <div v-if="genreOption.length > 0" v-for="item in genreOption">
+                    <label>
+                        
+                        <!-- , {{item.GENRE_NUM}} -->
+                        <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
+                        {{ item.GENRE_NAME }}
+                    </label>
+                </div>
+            </div>
+            <div class="categoryCheck box inlineBlock marginRight5px">
+                <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
+                    <label>
+                        
+                        <!-- , {{item.CATEGORY_NUM}} -->
+                        <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+                        {{ item.CATEGORY_NAME }}
+                    </label>
+                </div>
+            </div>
+            <div class="countrySelect inlineBlock marginRight5px">
+                <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
+                    <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
+                </select>
+            </div>
+            <div class="translatedSelect inlineBlock marginRight5px">
+                <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
+                    <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
+                </select>
+            </div>
+            <div class="typeSelect inlineBlock">
+                <select name="" v-model="typePick" @change="fnType(typePick)">
+                    <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
+                </select>
+            </div>
+            <hr>
+            <div class="searchList">
+                <input type="text" :value="genreList" class="checkPick" disabled>
+                <br>
+                <input type="text" :value="categoryList" class="checkPick marginTop5px" disabled>
+                <br>
+                <div class="marginTop5px">
+                    <input type="text" :value="countryPick" class="selectPick marginRight5px" disabled>
+                    <input type="text" :value="translatedPick" class="selectPick marginRight5px" disabled>
+                    <input type="text" :value="typePick" class="selectPick marginRight5px" disabled>
+                    <button @click="fnSearch">검색</button>
+                </div>
+            </div>
         </div>
 
         <hr>
 
-        <div v-if="listCategory.length > 0" v-for="item in listCategory">
-            {{ item.CATEGORY_NAME }}, {{item.CATEGORY_NUM}}
-            <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
-        </div>
-
-        <hr>
-
         <div>
-            <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
-                <option :value="item.COUNTRY_NAME"  v-if="listCountry.length > 0" v-for="item in listCountry">{{item.COUNTRY_NAME}}</option>
-            </select>
+            할거:체크 박스 요소 체크 시, 해당 요소 글씨색 or 배경색 변경
         </div>
-
         <div>
-            <button @click="fnCheck">btn</button>
+            <button @click="fnHome">home</button>
         </div>
         <!-- <div>
             <div v-if="list.length > 0" v-for="item in list">
@@ -74,15 +149,23 @@
             return {
                 // 변수 - (key : value)
                     // 변수 선언 부분
-                listGenre : [], //클라이언트에서 만든 리스트
+                genreOption : [], //클라이언트에서 만든 리스트
                 genreList : [], //서버에서 오는 리스트
 
-                listCategory : [], //클라이언트에서 만든 리스트
+                categoryOption : [], //클라이언트에서 만든 리스트
                 categoryList : [], //서버에서 오는 리스트
 
-                listCountry : [], //클라이언트에서 만든 리스트
+                countryOption : [], //클라이언트에서 만든 리스트
                 countryList : [], //서버에서 오는 리스트
-                countryPick : "국내"
+                countryPick : "국내",
+
+                translatedOption : [],
+                translatedList : [],
+                translatedPick : "한국어 원작",
+
+                typeOption : [],
+                typeList : [],
+                typePick : "책"
             };
         },
         
@@ -113,11 +196,11 @@
                     data: param,
                     success: function (data) {
                         // console.log(data.list);
-                        self.listGenre = data.genreList;
-                        console.log(self.listGenre);
-                        console.log(self.listGenre.length);
-                        console.log(self.listGenre[0]);
-                        console.log(self.listGenre[0].GENRE_NAME);
+                        self.genreOption = data.genreList;
+                        // console.log(self.genreOption);
+                        // console.log(self.genreOption.length);
+                        // console.log(self.genreOption[0]);
+                        // console.log(self.genreOption[0].GENRE_NAME);
                     }
                 });
             },
@@ -132,11 +215,11 @@
                     data: param,
                     success: function (data) {
                         // console.log(data.list);
-                        self.listCategory = data.categoryList;
-                        console.log(self.listCategory);
-                        console.log(self.listCategory.length);
-                        console.log(self.listCategory[0]);
-                        console.log(self.listCategory[0].CATEGORY_NAME);
+                        self.categoryOption = data.categoryList;
+                        // console.log(self.categoryOption);
+                        // console.log(self.categoryOption.length);
+                        // console.log(self.categoryOption[0]);
+                        // console.log(self.categoryOption[0].CATEGORY_NAME);
                     }
                 });
             },
@@ -151,11 +234,11 @@
                     data: param,
                     success: function (data) {
                         // console.log(data.list);
-                        self.listCountry = data.countryList;
-                        console.log(self.listCountry);
-                        console.log(self.listCountry.length);
-                        console.log(self.listCountry[0]);
-                        console.log(self.listCountry[0].COUNTRY_NAME);
+                        self.countryOption = data.countryList;
+                        // console.log(self.countryOption);
+                        // console.log(self.countryOption.length);
+                        // console.log(self.countryOption[0]);
+                        // console.log(self.countryOption[0].COUNTRY_NAME);
                     }
                 });
             },
@@ -164,11 +247,77 @@
                 console.log(country);
             },
 
-            fnCheck : function() {
+            fnTransList : function () {
                 let self = this;
-                console.log(self.genreList);
-                console.log(self.categoryList);
-                console.log(self.countryPick);
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/translated/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data);
+                        // console.log(data.translatedList[0]);
+                        self.translatedOption = data.translatedList;
+                        // console.log(self.translatedOption);
+                        
+                    }
+                });
+            },
+
+            fnTranslated : function (translated) {
+                console.log(translated);
+            },
+
+            fnTypeList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/type/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.typeList);
+                        self.typeOption = data.typeList;
+                        
+                    }
+                });
+            },
+
+            fnType : function (type) {
+                console.log(type);
+            },
+
+            fnHome : function () {
+                location.href="Main.html";
+            },
+
+            fnSearch : function() {
+                let self = this;
+                // console.log(self.genreList);
+                // console.log(self.categoryList);
+                // console.log(self.countryPick);
+                // console.log(self.translatedPick);
+                // console.log(self.typePick);
+                let param = {
+                    genreCheck : self.genreList,
+                    categoryCheck : self.categoryList,
+                    countryCheck : self.countryPick,
+                    translatedCheck : self.translatedPick,
+                    typeCheck : self.typePick
+                }
+                console.log(param);
+
+                // $.ajax({
+                //     url: "http://localhost:3009/search",
+                //     dataType: "json",
+                //     type: "GET",
+                //     data: param,
+                //     success: function (data) {
+                        
+                //     }
+                // });
             }
         }, // methods
         mounted() {
@@ -177,6 +326,8 @@
             self.fnGenreList();
             self.fnCategoryList();
             self.fnCountryList();
+            self.fnTransList();
+            self.fnTypeList();
         }
     });
 

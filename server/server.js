@@ -130,11 +130,11 @@ app.get('/member/login', async (req, res) => {
 });
 
 app.get('/member/view', async (req, res) => {
-  const {memberNum } = req.query;
+  const { memberNum } = req.query;
   let query = `WHERE MEMBER_NUM = ${memberNum}`
   console.log(query);
   try {
-    const result = await connection.execute(`SELECT * FROM PR_MEMBER `+query);
+    const result = await connection.execute(`SELECT mb.*,to_char(birth, 'YYYY-MM-DD') AS FORMATTED_BIRTH, STATUS FROM PR_MEMBER MB INNER JOIN PR_STATUS S ON MB.STATUS_CODE=S.STATUS_CODE `+query);
     const columnNames = result.metaData.map(column => column.name);
     // 쿼리 결과를 JSON 형태로 변환
     const rows = result.rows.map(row => {
@@ -301,6 +301,107 @@ app.get('/country/list', async (req, res) => {
     res.status(500).send('Error executing query');
   }
 });
+
+app.get('/translated/list', async (req, res) => {
+  const { } = req.query;
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_TRANSLATED`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        translatedList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/type/list', async (req, res) => {
+  const { } = req.query;
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_TYPE`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        typeList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/search', async (req, res) => {
+  const { genreCheck, countryCheck, categoryCheck, translatedCheck, typeCheck } = req.query;
+  let query = `WHERE MEMBER_NUM = ${memberNum}`
+  console.log(genreCheck);
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_MEMBER `+query);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        list : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/status/list', async (req, res) => {
+  const { } = req.query;
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_STATUS`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        statusList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+
+
 
 
 

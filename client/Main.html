@@ -9,8 +9,15 @@
         <!-- VUE 문법을 사용하려면 이게 필수 -->
          <!-- $가 붙으면 JQUERY -->
     <style>
+        #header{
+            width: 800px;
+            height: 40px;
+            margin: 0px auto;
+            background-color: darkgray;
+            border-radius: 5px;
+        }
         #container{
-            width: 1000px;
+            width: 800px;
             margin: 0px auto;
         }
         .box{
@@ -19,14 +26,6 @@
             height: 800px;
             border-radius: 5px;
             text-align: center;
-        }
-        .FloatLeft{
-            float: left;
-            margin: 10px;
-        }
-        .FloatRight{
-            float: right;
-            margin: 10px;
         }
         #webTB{
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../media/나혼렙.webp);
@@ -50,11 +49,11 @@
             text-align: center;
         }
         .sign button{
-            width: 200px;
+            /* width: 200px;
             height: 50px;
             margin: 10px;
             font-size: 25px;
-            border-radius: 10px;
+            border-radius: 10px; */
         }
         .sign button:hover{
             background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
@@ -63,49 +62,132 @@
         }
         .nickname{
             text-decoration: none;
-            color: white;
+            color: black;
         }
         .nickname:hover{
             color:bisque
         }
         .adminOption button{
-            width: 100px;
+            /* width: 100px;
             height: 50px;
-            font-size: 20px;
+            font-size: 20px; */
         }
-        
+        .info{
+            display: inline;
+            float: right;
+            margin: 5px;
+        }
+        .info button{
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        .logo{
+            display: inline;
+            color: white;
+            margin: 10px;
+        }
+        .bodyBox{
+            width: 100%;
+            height: 1000px;
+            background-color: white;
+            border-radius: 5px;
+        }
+        .userCont{
+            margin-right: 10px;
+        }
+        .menu{
+            background-color: rgb(35, 35, 35);
+            width: 100%;
+            height: 30px;
+        }
+        .menuBar{
+            width: 100px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: inline-block;
+            text-align: center;
+            float: left;
+            background-color: burlywood;
+        }
+        .menu1{
+            /* transform: translate(100px); */
+            background-color: rgb(236, 204, 163);
+        }
+        .menu2{
+            /* transform: translate(200px); */
+            background-color: rgb(243, 219, 187);
+        }
+        .menu3{
+            /* transform: translate(300px); */
+            background-color: rgb(240, 225, 206);
+        }
+        .menu4{
+            /* transform: translate(400px); */
+            background-color: rgb(245, 237, 226);
+        }
+        .searchTab{
+            background-color: darkgray;
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            padding: 5px;
+            vertical-align: top;
+            text-align: center;
+        }
+        .searchTab:hover{
+            background-color: gray;
+            cursor: pointer;
+            color: white;
+        }
     </style>
 </head>
 <body style="background-color: rgb(35, 35, 35);">
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+        <div id="header">
+            <span><h2 class="logo">bookey</h2></span>
+            <div class="searchTab">
+                검색
+            </div>
+            <span>
+                <span class="sign info" v-if="userId.length==0">
+                    <button @click="fnSignIn">회원가입</button>
+                    <button @click="fnLogin">로그인</button>
+                </span>
+                <span class="sign" v-if="userId.length!=0">
+                    <span class="info">
+                        <span class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
+                            <button @click="fnManage" class="userCont">유저 관리</button>
+                        </span>
+                        <span style="color: black;">
+                            <a class="nickname" href="javascript:;" @click="fnView(list[0].MEMBER_NUM)" v-if="list.length > 0">
+                                {{list[0].NICKNAME}}
+                            </a> 님
+                        </span>
+                        <button class="logout" @click="fnLogout">로그아웃</button>
+                    </span>
+                </span>
+            </span>
+        </div>
         <div id="container">
-            <div id="webTB" class="box FloatLeft" @click="fnWebTB">
-                <p>웹툰<br>웹소설</p>
-            </div>
-            <div id="book" class="box FloatRight" @click="fnBook">
-                <p>서적</p>
-            </div>
-            <div class="sign" v-if="userId.length==0">
-                <button @click="fnSignIn">회원가입</button>
-                <button @click="fnLogin">로그인</button>
-            </div>
-            <div class="sign" v-if="userId.length!=0">
-                <div>
-                    <span style="color: white;">
-                        <h2>어서오십시오</h2>
-                    </span>
-                </div>
-                <div>
-                    <span style="color: white;">
-                        <a class="nickname" href="javascript:;" @click="fnView(list[0].MEMBER_NUM)" v-if="list.length > 0">
-                            {{list[0].NICKNAME}}
-                        </a> 님
-                    </span>
-                </div>
-                <button class="logout" @click="fnLogout">로그아웃</button>
-                <div class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
-                    <button @click="fnManage">유저 관리</button>
+            <div class="bodyBox">
+                <div class="menu">
+                    <div class="menuBar">
+                        통합
+                    </div>
+                    <div @click="fnBook" class="menuBar menu1">
+                        서적
+                    </div>
+                    <div @click="fnWebTB" class="menuBar menu2">
+                        웹툰
+                    </div>
+                    <div @click="fnPrepare" class="menuBar menu3">
+                        웹소설
+                    </div>
+                    <div @click="fnPrepare" class="menuBar menu4">
+                        E북
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,6 +225,10 @@
                         console.log(self.list)
                     }
                 });
+            },
+
+            fnPrepare : function () {
+                alert("준비중입니다.");
             },
 
             fnWebTB: function () {

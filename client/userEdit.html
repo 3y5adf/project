@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <!-- VUE 문법을 사용하려면 이게 필수 -->
+         <!-- $가 붙으면 JQUERY -->
+    <style>
+        table, tr, td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+            text-align: center;
+        }
+        th{
+            background-color: beige;
+        }
+        tr:nth-child(even){
+            background-color: azure;
+        }
+        .memberStatus{
+            width: 140px;
+            height: 25px;
+            text-align: center;
+        }
+        /* .statusTd{
+            padding: 0px 0px;
+        } */
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+        
+        <div >
+            <table>
+                    <tr>
+                        <th>회원번호</th>
+                        <td>{{memberInfo.MEMBER_NUM}}</td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td>{{memberInfo.MEMBER_NAME}}</td>
+                    </tr>
+                    <tr>
+                        <th>닉네임</th>
+                        <td>{{memberInfo.NICKNAME}}</td>
+                    </tr>
+                    <tr>
+                        <th>생년월일</th>
+                        <td>{{memberInfo.FORMATTED_BIRTH}}</td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td>{{memberInfo.EMAIL}}</td>
+                    </tr>
+                    <tr>
+                        <th>ID</th>
+                        <td>{{memberInfo.ID}}</td>
+                    </tr>
+                    <tr>
+                        <th>등급</th>
+                        <td class="statusTd">
+                            <select class="memberStatus" v-model="memberStatus" @change="fnStatusChange(memberStatus)">
+                                <option :value="item.STATUS" v-for="item in statusList">{{item.STATUS}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <button @click="fnStatusEdit()">수정</button>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                    // 변수 선언 부분
+                memberNum : "",
+                memberInfo : {},
+                memberStatus : "",
+                memberStatusCode : "",
+
+                statusList : {}
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+                // 함수는 여기서만
+            fnList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+
+                    }
+                });
+            },
+
+            fnView : function (memberNum) {
+                let self = this;
+                let param = {memberNum};
+                $.ajax({
+                    url: "http://localhost:3009/member/view",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data.list[0]);
+                        self.memberInfo = data.list[0]
+                        self.memberStatus = data.list[0].STATUS;
+                        self.memberStatusCode = data.list[0].STATUS_CODE;
+                        console.log(self.memberStatus);
+                    }
+                });
+            },
+
+            fnStatusChange : function () {
+                let self = this;
+                console.log(self.memberStatus);
+                console.log(self.memberStatusCode);
+            },
+
+            fnStatusList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/status/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.statusList);
+                        self.statusList=data.statusList;
+                        console.log(self.statusList);
+                    }
+                });
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+            const queryParams = new URLSearchParams(window.location.search);
+            self.memberNum = queryParams.get('memberNum') || ''; 
+
+            self.fnView(self.memberNum);
+            self.fnStatusList();
+        }
+    });
+
+    app.mount('#app');
+</script>

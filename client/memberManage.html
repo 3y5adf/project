@@ -31,6 +31,10 @@
             text-decoration: none;
             color: black;
         }
+        td a{
+            text-decoration: none;
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -55,7 +59,11 @@
             </tr>
             <tr v-for="item in list">
                 <td>{{item.MEMBER_NUM}}</td>
-                <td>{{item.MEMBER_NAME}}</td>
+                <td>
+                    <a href="javascript:;" @click="fnUserInfo(item.MEMBER_NUM)">
+                        {{item.MEMBER_NAME}}
+                    </a>
+                </td>
                 <td>{{item.NICKNAME}}</td>
                 <td>{{item.BIRTHDAY}}</td>
                 <td>{{item.EMAIL}}</td>
@@ -114,6 +122,11 @@
                 let self = this;
                 self.page = num;
                 self.fnMemberList();
+            },
+
+            fnUserInfo : function (num) {
+                let self = this;
+                location.href="userInfo.html?memberNum="+num;
             },
 
             fnHome : function () {
