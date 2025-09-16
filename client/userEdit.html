@@ -65,7 +65,10 @@
                         <th>등급</th>
                         <td class="statusTd">
                             <select class="memberStatus" v-model="memberStatus" @change="fnStatusChange(memberStatus)">
-                                <option :value="item.STATUS" v-for="item in statusList">{{item.STATUS}}</option>
+                                
+                                <option :value="item.STATUS" v-for="item in statusList">
+                                    {{item.STATUS}}
+                                </option>
                             </select>
                         </td>
                     </tr>
@@ -120,7 +123,6 @@
                         console.log(data.list[0]);
                         self.memberInfo = data.list[0]
                         self.memberStatus = data.list[0].STATUS;
-                        self.memberStatusCode = data.list[0].STATUS_CODE;
                         console.log(self.memberStatus);
                     }
                 });
@@ -129,7 +131,7 @@
             fnStatusChange : function () {
                 let self = this;
                 console.log(self.memberStatus);
-                console.log(self.memberStatusCode);
+                // console.log(self.memberStatusCode);
             },
 
             fnStatusList : function () {
@@ -146,6 +148,12 @@
                         console.log(self.statusList);
                     }
                 });
+            },
+
+            fnStatusEdit : function () {
+                let self = this;
+                console.log(self.memberStatus);
+                
             }
         }, // methods
         mounted() {
