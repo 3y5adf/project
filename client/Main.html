@@ -15,6 +15,7 @@
             margin: 0px auto;
             background-color: darkgray;
             border-radius: 5px;
+            
         }
         #container{
             width: 800px;
@@ -23,7 +24,7 @@
         .box{
             border: 1px solid rgb(35, 35, 35);
             width: 475px;
-            height: 800px;
+            /* height: 800px; */
             border-radius: 5px;
             text-align: center;
         }
@@ -126,7 +127,7 @@
             /* transform: translate(400px); */
             background-color: rgb(245, 237, 226);
         }
-        .searchTab{
+        .tabMenu{
             background-color: darkgray;
             display: inline-block;
             width: 80px;
@@ -134,12 +135,119 @@
             padding: 5px;
             vertical-align: top;
             text-align: center;
+            position: relative;
         }
-        .searchTab:hover{
+        .tabMenu:hover{
             background-color: gray;
             cursor: pointer;
             color: white;
         }
+        .board{
+            text-decoration: none;
+            color: black;
+        }
+        .top-menu{
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+        }
+        .sub-menu{
+            width: 95px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+        }
+        .sub-menu a{
+            background-color: rgb(232, 232, 232);
+            display:block;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .sub-menu a:hover{
+            background-color: rgb(58, 58, 58);
+            color: white;
+        }
+        .boardMenu{
+            display: inline-block;
+        }
+        .boardMenu:hover .sub-menu{
+            display: block;
+        }
+        .searchMenu{
+            display: inline-block;
+        }
+        .searchPad{
+            /* width: 300px;
+            height: 150px; */
+            position: absolute;
+            top: 100%;
+            left: 0%;
+            background-color: rgb(232, 232, 232);
+        }
+        .searchGenre{
+            padding: 5px;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .searchGenre:hover{
+            background-color: beige;
+        }
+        .searchType{
+            padding: 5px;
+            display: inline-block;
+        }
+        .searchType:hover{
+            background-color: beige;
+        }
+        .searchPad:hover{
+
+        }
+
+
+        /* .marginRight5px{
+            margin-right: 5px;
+        }
+        .marginTop5px{
+            margin-top: 5px;
+        }
+        .inlineBlock{
+            display: inline-block;
+        }
+        .searchElement{
+            vertical-align : top;
+        }
+        .selectPick{
+            width: 70px;
+        }
+        .checkPick{
+            width: 500px;
+        }
+        .genreCheck{
+            margin: 5px;
+            width: 110px;
+            vertical-align : top;
+        }
+        .categoryCheck{
+            margin-top: 5px;
+            width: 140px;
+            vertical-align : top;
+        }
+        .countrySelect{
+            vertical-align : top;
+        }
+        .translatedSelect{
+            vertical-align : top;
+        }
+        .typeSelect{
+            vertical-align : top;
+        }
+        .searchList{
+            margin: 10px;
+        } */
     </style>
 </head>
 <body style="background-color: rgb(35, 35, 35);">
@@ -147,17 +255,74 @@
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
         <div id="header">
             <span><h2 class="logo">bookey</h2></span>
-            <div class="searchTab">
-                검색
+            <div class="top-menu">
+                <div class="searchMenu" @click="fnToggle">
+                    <div class="tabMenu">검색</div>
+                    <div class="searchPad" v-show="searchVisible">
+
+                        <div class="searchGenre" @click="fnGenreToggle">장르</div>
+                        <div class="genreList" v-show="genreVisible">
+                            <div v-if="genreOption.length > 0" v-for="item in genreOption">
+                                <label>
+                                    
+                                    <!-- , {{item.GENRE_NUM}} -->
+                                    <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
+                                    {{ item.GENRE_NAME }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="searchType" @click="fnCategoryToggle">종류</div>
+                        <div class="categoryList" v-show="categoryVisible">
+                            <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
+                                <label>
+                            
+                                    <!-- , {{item.CATEGORY_NUM}} -->
+                                    <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+                                    {{ item.CATEGORY_NAME }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
+                            <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
+                        </select>
+
+                        <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
+                            <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
+                        </select>
+
+                        <select name="" v-model="typePick" @change="fnType(typePick)">
+                            <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sub-menu"></div>
+
+                <div class="boardMenu">
+                    <a href="board.html" class="board">
+                        <div class="tabMenu">
+                            게시판
+                        </div>
+                    </a>
+                    <div class="sub-menu">
+                        <a href="">공지사항</a>
+                        <a href="">자유게시판</a>
+                        <a href="">문의게시판</a>
+                        <a href="">정보게시판</a>
+                    </div>
+                </div>
             </div>
+
             <span>
                 <span class="sign info" v-if="userId.length==0">
-                    <button @click="fnSignIn">회원가입</button>
+                    <button @click="fnSignUp">회원가입</button>
                     <button @click="fnLogin">로그인</button>
                 </span>
                 <span class="sign" v-if="userId.length!=0">
                     <span class="info">
                         <span class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
+                            <!-- status_code가 관리자인 경우에만 회원 관리 가능하도록 수정하기. -->
                             <button @click="fnManage" class="userCont">유저 관리</button>
                         </span>
                         <span style="color: black;">
@@ -189,6 +354,92 @@
                         E북
                     </div>
                 </div>
+
+                
+
+
+
+
+
+
+
+
+
+                
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="searchElement box">
+                <div class="genreCheck box inlineBlock marginRight5px">
+                    <div v-if="genreOption.length > 0" v-for="item in genreOption">
+                        <label>
+                            
+                            <!-- , {{item.GENRE_NUM}} -->
+                            <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
+                            {{ item.GENRE_NAME }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="categoryCheck box inlineBlock marginRight5px">
+                    <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
+                        <label>
+                            
+                            <!-- , {{item.CATEGORY_NUM}} -->
+                            <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+                            {{ item.CATEGORY_NAME }}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="countrySelect inlineBlock marginRight5px">
+                    <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
+                        <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
+                    </select>
+                </div>
+
+                <div class="translatedSelect inlineBlock marginRight5px">
+                    <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
+                        <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
+                    </select>
+                </div>
+                
+                <div class="typeSelect inlineBlock">
+                    <select name="" v-model="typePick" @change="fnType(typePick)">
+                        <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="searchList">
+                    <input type="text" :value="genreList" class="checkPick" disabled>
+                    <br>
+                    <input type="text" :value="categoryList" class="checkPick marginTop5px" disabled>
+                    <br>
+                    <div class="marginTop5px">
+                        <input type="text" :value="countryPick" class="selectPick marginRight5px" disabled>
+                        <input type="text" :value="translatedPick" class="selectPick marginRight5px" disabled>
+                        <input type="text" :value="typePick" class="selectPick marginRight5px" disabled>
+                        <button @click="fnSearch">검색</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -203,7 +454,28 @@
                 // 변수 - (key : value)
                     // 변수 선언 부분
                 userId : "",
-                list : []
+                list : [],
+                searchVisible : false,
+                genreVisible : false,
+                categoryVisible : false,
+                
+                genreOption : [], //클라이언트에서 만든 리스트
+                genreList : [], //서버에서 오는 리스트
+
+                categoryOption : [], //클라이언트에서 만든 리스트
+                categoryList : [], //서버에서 오는 리스트
+
+                countryOption : [], //클라이언트에서 만든 리스트
+                countryList : [], //서버에서 오는 리스트
+                countryPick : "국내",
+
+                translatedOption : [],
+                translatedList : [],
+                translatedPick : "한국어 원작",
+
+                typeOption : [],
+                typeList : [],
+                typePick : "책"
             };
         },
         methods: {
@@ -239,8 +511,8 @@
                 location.href="Main-book.html"
             },
 
-            fnSignIn: function () {
-                location.href="SignIn.html"
+            fnSignUp: function () {
+                location.href="SignUp.html"
             }, 
 
             fnLogin: function () {
@@ -259,6 +531,124 @@
 
             fnManage : function () {
                 location.href="memberManage.html";
+            },
+
+            fnToggle : function () {
+                let self = this;
+                self.searchVisible = !self.searchVisible;
+            },
+
+            fnGenreToggle : function () {
+                let self = this;
+                self.genreVisible = !self.genreVisible;
+            },
+
+            fnCategoryToggle : function () {
+                let self = this;
+                self.categoryVisible = !self.categoryVisible;
+            },
+
+            fnGenreList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/genre/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.genreOption = data.genreList;
+                        // console.log(self.genreOption);
+                        // console.log(self.genreOption.length);
+                        // console.log(self.genreOption[0]);
+                        // console.log(self.genreOption[0].GENRE_NAME);
+                    }
+                });
+            },
+
+            fnCategoryList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/category/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.categoryOption = data.categoryList;
+                        // console.log(self.categoryOption);
+                        // console.log(self.categoryOption.length);
+                        // console.log(self.categoryOption[0]);
+                        // console.log(self.categoryOption[0].CATEGORY_NAME);
+                    }
+                });
+            },
+
+            fnCountryList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/country/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.countryOption = data.countryList;
+                        // console.log(self.countryOption);
+                        // console.log(self.countryOption.length);
+                        // console.log(self.countryOption[0]);
+                        // console.log(self.countryOption[0].COUNTRY_NAME);
+                    }
+                });
+            },
+
+            fnCountry:function (country){
+                console.log(country);
+            },
+
+            fnTransList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/translated/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data);
+                        // console.log(data.translatedList[0]);
+                        self.translatedOption = data.translatedList;
+                        // console.log(self.translatedOption);
+                        
+                    }
+                });
+            },
+
+            fnTranslated : function (translated) {
+                console.log(translated);
+            },
+
+            fnTypeList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/type/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.typeList);
+                        self.typeOption = data.typeList;
+                        
+                    }
+                });
+            },
+
+            fnType : function (type) {
+                console.log(type);
             }
         }, // methods
         mounted() {
@@ -272,6 +662,12 @@
 
             console.log(self.userId);
             console.log(self.userStatus);
+
+            self.fnGenreList();
+            self.fnCategoryList();
+            self.fnCountryList();
+            self.fnTransList();
+            self.fnTypeList();
         }
     });
 

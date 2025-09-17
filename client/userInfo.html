@@ -59,6 +59,7 @@
                 </tr>
             </table>
             <button @click="fnMemberEdit(memberInfo.MEMBER_NUM)">수정</button>
+            <button @click="fnBack">취소</button>
         </div>
     </div>
 </body>
@@ -108,6 +109,10 @@
 
             fnMemberEdit : function (memberNum) {
                 location.href="userEdit.html?memberNum="+memberNum;
+            },
+
+            fnBack : function () {
+                location.href="memberManage.html";
             }
         }, // methods
         mounted() {

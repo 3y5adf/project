@@ -132,7 +132,7 @@ app.get('/member/login', async (req, res) => {
 app.get('/member/view', async (req, res) => {
   const { memberNum } = req.query;
   let query = `WHERE MEMBER_NUM = ${memberNum}`
-  console.log(query);
+  // console.log(query);
   try {
     const result = await connection.execute(`SELECT mb.*,to_char(birth, 'YYYY-MM-DD') AS FORMATTED_BIRTH, STATUS FROM PR_MEMBER MB INNER JOIN PR_STATUS S ON MB.STATUS_CODE=S.STATUS_CODE `+query);
     const columnNames = result.metaData.map(column => column.name);
@@ -377,9 +377,10 @@ app.get('/search', async (req, res) => {
 });
 
 app.get('/status/list', async (req, res) => {
-  const { } = req.query;
+  const { memberStatus } = req.query;
+
   try {
-    const result = await connection.execute(`SELECT * FROM PR_STATUS`);
+    const result = await connection.execute(`SELECT * FROM PR_STATUS `);
     const columnNames = result.metaData.map(column => column.name);
     // 쿼리 결과를 JSON 형태로 변환
     const rows = result.rows.map(row => {
@@ -397,6 +398,51 @@ app.get('/status/list', async (req, res) => {
   } catch (error) {
     console.error('Error executing query', error);
     res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/status/codeSearch', async (req, res) => {
+  const { memberStatus } = req.query;
+  
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_STATUS WHERE STATUS = '` + memberStatus + `'`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        statusList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/status/edit', async (req, res) => {
+  const { statusCode, memberNum } = req.query;
+    // self.info를 파라미터로 받아서 들어오는 값들
+  try {
+    await connection.execute(
+      `UPDATE PR_MEMBER SET STATUS_CODE = :statusCode WHERE MEMBER_NUM = :memberNum`,
+      [ statusCode, memberNum],
+        //  :로 참조 가능하게 해줌
+        // 쿼리의 순서와 값의 순서가 같아야 함
+      { autoCommit: true }
+    );
+    res.json({
+        result : "success"
+    });
+  } catch (error) {
+    console.error('Error executing insert', error);
+    res.status(500).send('Error executing insert');
   }
 });
 

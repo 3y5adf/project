@@ -73,7 +73,8 @@
                         </td>
                     </tr>
                 </table>
-                <button @click="fnStatusEdit()">수정</button>
+                <button @click="fnStatusEdit(statusCode)">확인</button>
+                <button @click="fnBack(memberInfo.MEMBER_NUM)">취소</button>
         </div>
     </div>
 </body>
@@ -91,7 +92,8 @@
                 memberStatus : "",
                 memberStatusCode : "",
 
-                statusList : {}
+                statusList : {},
+                statusCode : ""
             };
         },
         methods: {
@@ -122,16 +124,32 @@
                     success: function (data) {
                         console.log(data.list[0]);
                         self.memberInfo = data.list[0]
+                        self.statusCode = data.list[0].STATUS_CODE;
                         self.memberStatus = data.list[0].STATUS;
                         console.log(self.memberStatus);
+                        console.log(self.statusCode);
                     }
                 });
             },
 
-            fnStatusChange : function () {
+            fnStatusChange : function (memberStatus) {
                 let self = this;
                 console.log(self.memberStatus);
-                // console.log(self.memberStatusCode);
+                let param = {memberStatus};
+                $.ajax({
+                    url: "http://localhost:3009/status/codeSearch",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.statusList[0].STATUS_CODE);
+                        // console.log(data.statusList);
+                        // self.statusList=data.statusList;
+                        // console.log(self.statusList);
+                        self.statusCode = data.statusList[0].STATUS_CODE;
+                        console.log(self.statusCode);
+                    }
+                });
             },
 
             fnStatusList : function () {
@@ -150,10 +168,34 @@
                 });
             },
 
-            fnStatusEdit : function () {
+            fnStatusEdit : function (statusCode) {
                 let self = this;
                 console.log(self.memberStatus);
+                console.log(self.statusCode);
+                // console.log(statusCode);
+                // console.log(self.memberNum);
+                let param = {
+                    statusCode : self.statusCode,
+                    memberNum : self.memberNum
+                };
+                $.ajax({
+                    url: "http://localhost:3009/status/edit",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.statusList);
+                        // console.log(self.memberNum);
+                        alert("수정되었습니다.");
+                        location.href="userInfo.html?memberNum="+self.memberNum;
+                    }
+                });
                 
+            },
+
+            fnBack : function (memberNum) {
+                location.href="userInfo.html?memberNum="+memberNum;
+                // console.log(memberNum);
             }
         }, // methods
         mounted() {
