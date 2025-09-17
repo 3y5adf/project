@@ -74,21 +74,6 @@
             color: white;
             margin: 10px;
         }
-        .sign{
-            text-align: center;
-        }
-        .sign button{
-            /* width: 200px;
-            height: 50px;
-            margin: 10px;
-            font-size: 25px;
-            border-radius: 10px; */
-        }
-        .sign button:hover{
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
-            color: white;
-            cursor: pointer;
-        }
         .menu{
             display: inline-block;
             padding: 5px;
@@ -112,28 +97,6 @@
             text-decoration: none;
             color: black;
         }
-        .sign{
-            text-align: center;
-        }
-        .info{
-            display: inline;
-            float: right;
-            margin: 5px;
-        }
-        .info button{
-            border: 1px solid gray;
-            border-radius: 5px;
-        }
-        .nickname{
-            text-decoration: none;
-            color: black;
-        }
-        .nickname:hover{
-            color:bisque
-        }
-        .userCont{
-            margin-right: 10px;
-        }
     </style>
 </head>
 <body style="background-color: rgb(35, 35, 35);">
@@ -145,27 +108,6 @@
                 <div class="topLine" @click="fnHome">
                     <span><h2 class="logo">bookey</h2></span>
                 </div>
-
-                <span>
-                    <span class="sign info" v-if="userId.length==0">
-                        <button @click="fnSignUp">회원가입</button>
-                        <button @click="fnLogin">로그인</button>
-                    </span>
-                    <span class="sign" v-if="userId.length!=0">
-                        <span class="info">
-                            <span class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
-                                <!-- status_code가 관리자인 경우에만 회원 관리 가능하도록 수정하기. -->
-                                <button @click="fnManage" class="userCont">유저 관리</button>
-                            </span>
-                            <span style="color: black;">
-                                <a class="nickname" href="javascript:;" @click="fnView(list[0].MEMBER_NUM)" v-if="list.length > 0">
-                                    {{list[0].NICKNAME}}
-                                </a> 님
-                            </span>
-                            <button class="logout" @click="fnLogout">로그아웃</button>
-                        </span>
-                    </span>
-                </span>
 
                 <div class="menuLine">
                     <a href="">
@@ -194,74 +136,12 @@
                         </div>
                     </a>
                 </div>
-                
-                
-                <!-- <div class="main-menu">Dropdown</div>
-                <div class="sub-menu">
-                    <a href="">Menu 1</a>
-                    <a href="">Menu 2</a>
-                    <a href="">Menu 3</a>
-                </div>
-                <div class="main-menu">Dropdown</div>
-                <div class="sub-menu">
-                    <a href="">Menu 1</a>
-                    <a href="">Menu 2</a>
-                    <a href="">Menu 3</a>
-                </div>
-                <div class="main-menu">Dropdown</div>
-                <div class="sub-menu">
-                    <a href="">Menu 1</a>
-                    <a href="">Menu 2</a>
-                    <a href="">Menu 3</a>
-                </div> -->
             </div>
-            <div class="body tempBox">
-                <table>
-                    <tr>
-                        <th>
-                            게시글 번호
-                        </th>
-                        <th>
-                            게시판 종류
-                        </th>
-                        <th>
-                            작성자
-                        </th>
-                        <th v-if="userStatus==0 || userStatus==1">
-                            ID
-                        </th>
-                        <th>
-                            제목
-                        </th>
-                        <th>
-                            조회수
-                        </th>
-                    </tr>
-                    <tr v-for="item in boardList">
-                        <td>
-                            {{item.BOARD_NUM}}
-                        </td>
-                        <td>
-                            {{item.BOARD_KIND}}
-                        </td>
-                        <td>
-                            {{item.NICKNAME}}
-                        </td>
-                        <td v-if="userStatus==0 || userStatus==1">
-                            {{item.ID}}
-                        </td>
-                        <td>
-                            <a href="javascript:;" class="boardTitle" @click="fnBoardInfo(item.BOARD_NUM)">
-                                {{item.BOARD_TITLE}}
-                            </a>
-                        </td>
-                        <td>
-                            {{item.VIEWCNT}}
-                        </td>
-                    </tr>
-                </table>
-                <button @click="fnBoardInsert(userId)">글쓰기</button>
+            <div class="body">
+                board-info, boardNum={{boardNum}}
             </div>
+
+            
         </div>
     </div>
 </body>
@@ -275,7 +155,8 @@
                     // 변수 선언 부분
                 userId : "",
                 boardList : [],
-                userStatus : ""
+                userStatus : "",
+                boardNum : ""
             };
         },
         methods: {
@@ -321,28 +202,6 @@
 
             fnBoardInfo : function(boardNum) {
                 location.href="board-info.html?boardNum="+boardNum;
-            },
-
-            fnSignUp: function () {
-                location.href="SignUp.html"
-            }, 
-
-            fnLogin: function () {
-                location.href="Login.html"
-            },
-
-	        fnManage : function () {
-                location.href="memberManage.html";
-            },
-
-        	fnView : function(MEMBER_NUM){
-                location.href="userView.html?memberNum="+MEMBER_NUM;
-            },
-
-        	fnLogout : function () {
-                sessionStorage.removeItem('userId');
-                sessionStorage.removeItem('userStatus');
-                location.href="Main.html";
             }
         }, // methods
         mounted() {
@@ -357,6 +216,9 @@
             console.log(self.userId);
             console.log(self.userStatus);
             self.fnBoardList();
+
+            const queryParams = new URLSearchParams(window.location.search);
+            self.boardNum = queryParams.get('boardNum') || ''; 
         }
     });
 

@@ -8,6 +8,9 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
         <!-- VUE 문법을 사용하려면 이게 필수 -->
          <!-- $가 붙으면 JQUERY -->
+
+        <!-- 2025.09.17 백업 -->
+
     <style>
         table, tr, td, th{
             border: 1px solid black;
@@ -74,8 +77,62 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
 
-        
+        <div class="searchElement box">
+            <div class="genreCheck box inlineBlock marginRight5px">
+                <div v-if="genreOption.length > 0" v-for="item in genreOption">
+                    <label>
+                        
+                        <!-- , {{item.GENRE_NUM}} -->
+                        <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
+                        {{ item.GENRE_NAME }}
+                    </label>
+                </div>
+            </div>
+            <div class="categoryCheck box inlineBlock marginRight5px">
+                <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
+                    <label>
+                        
+                        <!-- , {{item.CATEGORY_NUM}} -->
+                        <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+                        {{ item.CATEGORY_NAME }}
+                    </label>
+                </div>
+            </div>
+            <div class="countrySelect inlineBlock marginRight5px">
+                <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
+                    <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
+                </select>
+            </div>
+            <div class="translatedSelect inlineBlock marginRight5px">
+                <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
+                    <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
+                </select>
+            </div>
+            <div class="typeSelect inlineBlock">
+                <select name="" v-model="typePick" @change="fnType(typePick)">
+                    <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
+                </select>
+            </div>
+            <hr>
+            <div class="searchList">
+                <input type="text" :value="genreList" class="checkPick" disabled>
+                <br>
+                <input type="text" :value="categoryList" class="checkPick marginTop5px" disabled>
+                <br>
+                <div class="marginTop5px">
+                    <input type="text" :value="countryPick" class="selectPick marginRight5px" disabled>
+                    <input type="text" :value="translatedPick" class="selectPick marginRight5px" disabled>
+                    <input type="text" :value="typePick" class="selectPick marginRight5px" disabled>
+                    <button @click="fnSearch">검색</button>
+                </div>
+            </div>
+        </div>
 
+        <hr>
+
+        <div>
+            할거:체크 박스 요소 체크 시, 해당 요소 글씨색 or 배경색 변경
+        </div>
         <div>
             <button @click="fnHome">home</button>
         </div>
