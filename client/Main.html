@@ -22,29 +22,12 @@
             margin: 0px auto;
         }
         .box{
-            border: 1px solid rgb(35, 35, 35);
-            width: 475px;
-            /* height: 800px; */
-            border-radius: 5px;
-            text-align: center;
+            
         }
-        #webTB{
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../media/나혼렙.webp);
-        }
-        #webTB:hover{
-            cursor: pointer;
-            background-image: url(../media/나혼렙.webp);
-        }
+        
         p{
             font-size: 100px;
             color: white;
-        }
-        #book{
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(../media/Books___.jpg);
-        }
-        #book:hover{
-            cursor: pointer;
-            background-image: url(../media/Books___.jpg);
         }
         .sign{
             text-align: center;
@@ -101,6 +84,7 @@
             width: 100%;
             height: 30px;
         }
+        
         .menuBar{
             width: 100px;
             height: 30px;
@@ -110,6 +94,11 @@
             text-align: center;
             float: left;
             background-color: burlywood;
+        }
+        .menuBar:hover{
+            background-color: lightblue;
+            font-weight: bold;
+            border: 2px solid blue;
         }
         .menu1{
             /* transform: translate(100px); */
@@ -181,8 +170,8 @@
             display: inline-block;
         }
         .searchPad{
-            /* width: 300px;
-            height: 150px; */
+            width: 330px;
+            /* height: 150px; */
             position: absolute;
             top: 100%;
             left: 0%;
@@ -192,6 +181,7 @@
             padding: 5px;
             display: inline-block;
             cursor: pointer;
+            
         }
         .searchGenre:hover{
             background-color: beige;
@@ -203,51 +193,47 @@
         .searchType:hover{
             background-color: beige;
         }
-        .searchPad:hover{
-
+        .searchType:hover .categoryList{
+            display: block;
         }
-
-
-        /* .marginRight5px{
-            margin-right: 5px;
+        .searchGenre:hover .genreList{
+            display: block;
         }
-        .marginTop5px{
-            margin-top: 5px;
+        .genreList{
+            position: absolute;
+            top: 25%;
+            left: 0%;
+            background-color: beige;
+            display: none;
+        }
+        .categoryList{
+            background-color: beige;
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 13.4%;
         }
         .inlineBlock{
             display: inline-block;
         }
-        .searchElement{
-            vertical-align : top;
-        }
-        .selectPick{
-            width: 70px;
+        .marginRight5px{
+            margin-right: 5px;
         }
         .checkPick{
-            width: 500px;
+            width: 300px;
+            margin-left: 5px;
+            margin-bottom: 5px;
         }
-        .genreCheck{
-            margin: 5px;
-            width: 110px;
-            vertical-align : top;
+        .selectPick{
+            margin-left: 5px;
+            margin-bottom: 5px;
+            width: 70px;
         }
-        .categoryCheck{
-            margin-top: 5px;
-            width: 140px;
-            vertical-align : top;
+        .searchBtn{
+            margin-left: 25px;
         }
-        .countrySelect{
-            vertical-align : top;
-        }
-        .translatedSelect{
-            vertical-align : top;
-        }
-        .typeSelect{
-            vertical-align : top;
-        }
-        .searchList{
-            margin: 10px;
-        } */
+
+
     </style>
 </head>
 <body style="background-color: rgb(35, 35, 35);">
@@ -257,44 +243,71 @@
             <span><h2 class="logo">bookey</h2></span>
             <div class="top-menu">
                 <div class="searchMenu" @click="fnToggle">
-                    <div class="tabMenu">검색</div>
-                    <div class="searchPad" v-show="searchVisible">
+                    <div class="tabMenu" >검색</div>
+                    <div class="searchPad" v-show="searchVisible"  @click.stop>
 
-                        <div class="searchGenre" @click="fnGenreToggle">장르</div>
-                        <div class="genreList" v-show="genreVisible">
-                            <div v-if="genreOption.length > 0" v-for="item in genreOption">
-                                <label>
-                                    
-                                    <!-- , {{item.GENRE_NUM}} -->
-                                    <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
-                                    {{ item.GENRE_NAME }}
-                                </label>
+                        <!-- 검색 누르면 펼쳐지는건 되지만, 장르,종류,select를 클릭했을 때
+                             검색이 클릭을 감지해서 접혀짐 -->
+                        <div class="searchGenre marginRight5px">
+                            장르
+                            <div class="genreList">
+                                <div v-if="genreOption.length > 0" v-for="item in genreOption">
+                                    <label>
+                                        
+                                        <!-- , {{item.GENRE_NUM}} -->
+                                        <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
+                                        {{ item.GENRE_NAME }}
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                        
 
-                        <div class="searchType" @click="fnCategoryToggle">종류</div>
-                        <div class="categoryList" v-show="categoryVisible">
-                            <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
-                                <label>
-                            
-                                    <!-- , {{item.CATEGORY_NUM}} -->
-                                    <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
-                                    {{ item.CATEGORY_NAME }}
-                                </label>
+                        <div class="searchType marginRight5px">
+                            종류
+                            <div class="categoryList">
+                                <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
+                                    <label>
+                                
+                                        <!-- , {{item.CATEGORY_NUM}} -->
+                                        <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+                                        {{ item.CATEGORY_NAME }}
+                                    </label>
+                                </div>
                             </div>
                         </div>
+                        
 
-                        <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
-                            <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
-                        </select>
+                        <div class="inlineBlock marginRight5px">
+                            <select name="" v-model="countryPick" @change="fnCountry(countryPick)" >
+                                <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
+                            </select>
+                        </div>
 
-                        <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
-                            <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
-                        </select>
+                        <div class="inlineBlock marginRight5px">
+                            <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
+                                <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
+                            </select>
+                        </div>
 
-                        <select name="" v-model="typePick" @change="fnType(typePick)">
-                            <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
-                        </select>
+                        <div class="inlineBlock">
+                            <select name="" v-model="typePick" @change="fnType(typePick)">
+                                <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="searchList">
+                            <input type="text" :value="genreList" class="checkPick" disabled>
+                            <br>
+                            <input type="text" :value="categoryList" class="checkPick" disabled>
+                            <br>
+                            <div class="marginTop5px">
+                                <input type="text" :value="countryPick" class="selectPick" disabled>
+                                <input type="text" :value="translatedPick" class="selectPick" disabled>
+                                <input type="text" :value="typePick" class="selectPick" disabled>
+                                <button @click="fnSearch" class="searchBtn">검색</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="sub-menu"></div>
@@ -336,6 +349,7 @@
             </span>
         </div>
         <div id="container">
+        
             <div class="bodyBox">
                 <div class="menu">
                     <div class="menuBar">
@@ -354,93 +368,10 @@
                         E북
                     </div>
                 </div>
-
-                
-
-
-
-
-
-
-
-
-
+            
                 
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <div class="searchElement box">
-                <div class="genreCheck box inlineBlock marginRight5px">
-                    <div v-if="genreOption.length > 0" v-for="item in genreOption">
-                        <label>
-                            
-                            <!-- , {{item.GENRE_NUM}} -->
-                            <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
-                            {{ item.GENRE_NAME }}
-                        </label>
-                    </div>
-                </div>
-
-                <div class="categoryCheck box inlineBlock marginRight5px">
-                    <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
-                        <label>
-                            
-                            <!-- , {{item.CATEGORY_NUM}} -->
-                            <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
-                            {{ item.CATEGORY_NAME }}
-                        </label>
-                    </div>
-                </div>
-
-                <div class="countrySelect inlineBlock marginRight5px">
-                    <select name="" v-model="countryPick" @change="fnCountry(countryPick)">
-                        <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
-                    </select>
-                </div>
-
-                <div class="translatedSelect inlineBlock marginRight5px">
-                    <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
-                        <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
-                    </select>
-                </div>
-                
-                <div class="typeSelect inlineBlock">
-                    <select name="" v-model="typePick" @change="fnType(typePick)">
-                        <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
-                    </select>
-                </div>
-                <hr>
-                <div class="searchList">
-                    <input type="text" :value="genreList" class="checkPick" disabled>
-                    <br>
-                    <input type="text" :value="categoryList" class="checkPick marginTop5px" disabled>
-                    <br>
-                    <div class="marginTop5px">
-                        <input type="text" :value="countryPick" class="selectPick marginRight5px" disabled>
-                        <input type="text" :value="translatedPick" class="selectPick marginRight5px" disabled>
-                        <input type="text" :value="typePick" class="selectPick marginRight5px" disabled>
-                        <button @click="fnSearch">검색</button>
-                    </div>
-                </div>
-            </div>
+        
         </div>
     </div>
 </body>
@@ -456,8 +387,6 @@
                 userId : "",
                 list : [],
                 searchVisible : false,
-                genreVisible : false,
-                categoryVisible : false,
                 
                 genreOption : [], //클라이언트에서 만든 리스트
                 genreList : [], //서버에서 오는 리스트
@@ -538,15 +467,6 @@
                 self.searchVisible = !self.searchVisible;
             },
 
-            fnGenreToggle : function () {
-                let self = this;
-                self.genreVisible = !self.genreVisible;
-            },
-
-            fnCategoryToggle : function () {
-                let self = this;
-                self.categoryVisible = !self.categoryVisible;
-            },
 
             fnGenreList: function () {
                 let self = this;
@@ -649,6 +569,32 @@
 
             fnType : function (type) {
                 console.log(type);
+            },
+
+            fnSearch : function(){
+                let self = this;
+                // console.log(self.genreList);
+                // console.log(self.categoryList);
+                // console.log(self.countryPick);
+                // console.log(self.translatedPick);
+                // console.log(self.typePick);
+                let param = {
+                    genreCheck : self.genreList,
+                    categoryCheck : self.categoryList,
+                    countryCheck : self.countryPick,
+                    translatedCheck : self.translatedPick,
+                    typeCheck : self.typePick
+                }
+                console.log(param);
+                $.ajax({
+                    url: "http://localhost:3009/",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        
+                    }
+                });
             }
         }, // methods
         mounted() {

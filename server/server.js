@@ -446,7 +446,128 @@ app.get('/status/edit', async (req, res) => {
   }
 });
 
+app.get('/board/memberSearch', async (req, res) => {
+  const { memberId } = req.query;
+  
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_MEMBER WHERE ID = '` + memberId + `'`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        memberList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
 
+app.get('/boardKind/list', async (req, res) => {
+  const {  } = req.query;
+  
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_BOARD_KIND`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        kindList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/boardKind/code', async (req, res) => {
+  const { kindPick } = req.query;
+  
+  try {
+    const result = await connection.execute(`SELECT * FROM PR_BOARD_KIND WHERE BOARD_KIND = '` + kindPick + `'`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        kindPick : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/board/insert', async (req, res) => {
+  const { kindCode, boardTitle, boardContents, memberNickname, memberId } = req.query;
+
+  try {
+    await connection.execute(
+      `INSERT INTO PR_BOARD(BOARD_NUM, BOARD_TITLE, ID, NICKNAME, BOARD_CODE, BOARD_CONTENTS, BOARD_LIKES, VIEWCNT, CTIME, UTIME, COMMENT_CNT, BOARD_STATUS_CODE) `
+    + `VALUES(PR_BOARD_SEQ.NEXTVAL, :boardTitle, :memberId, `
+    + `:memberNickname, :kindCode, :boardContents, 0, 0, SYSDATE, SYSDATE, 0, 1)`,
+      [boardTitle, memberId, memberNickname, kindCode, boardContents,],
+      { autoCommit: true }
+    );
+    res.json({
+        result : "success"
+    });
+  } catch (error) {
+    console.error('Error executing insert', error);
+    res.status(500).send('Error executing insert');
+  }
+});
+
+app.get('/board/list', async (req, res) => {
+  const {  } = req.query;
+  
+  try {
+    const result = await connection.execute(
+      `SELECT * FROM PR_BOARD PB `
+    + `INNER JOIN PR_BOARD_KIND PBK `
+    + `ON PB.BOARD_CODE = PBK.BOARD_CODE ORDER BY BOARD_NUM DESC`);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        boardList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
 
 
 
