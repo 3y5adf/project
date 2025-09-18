@@ -178,7 +178,7 @@
                 </span>
 
                 <div class="menuLine">
-                    <a href="javascript:;" @click="fnMenuAll">
+                    <a href="javascript:;" @click="fnMenuAll(0)">
                         <div class="menu menuAll">
                             전체글
                         </div>
@@ -289,7 +289,8 @@
                 userId : "",
                 boardList : [],
                 userStatus : "",
-                list : ""
+                list : "",
+                boardNum : ""
             };
         },
         methods: {
@@ -338,8 +339,17 @@
                 });
             },
 
+            // 조회수 증가용
+            // fnViewCntUp : function(boardNum) {
+            //     let self = this;
+            //     alert(self.boardNum);
+            // },
+
             fnBoardInfo : function(boardNum) {
+                let self = this;
+                // self.fnViewCntUp();
                 location.href="board-info.html?boardNum="+boardNum;
+                
             },
 
             fnSignUp: function () {
@@ -382,8 +392,8 @@
                 location.href="Main.html";
             },
 
-            fnMenuAll : function () {
-                location.href="board.html";
+            fnMenuAll : function (boardStatusNum) {
+                location.href="board.html?boardStatusNum="+boardStatusNum;
             }
         }, // methods
         mounted() {

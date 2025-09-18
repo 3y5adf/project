@@ -237,6 +237,10 @@
         }
         .bodyMain{
             padding: 5px;
+            width: 1500px;
+            margin: 5px auto;
+            border: 1px solid black;
+            display: grid;
         }
 
     </style>
@@ -322,7 +326,7 @@
                 <div class="sub-menu"></div>
 
                 <div class="boardMenu">
-                    <a href="board.html" class="board">
+                    <a href="javascript:;" class="board" @click="fnBoardHome(0)">
                         <div class="tabMenu">
                             게시판
                         </div>
@@ -614,6 +618,10 @@
                 //         location
                 //     }
                 // });
+            },
+
+            fnBoardHome: function (boardStatusNum) {
+                location.href="board.html?boardStatusNum="+boardStatusNum;
             }
         }, // methods
         mounted() {
