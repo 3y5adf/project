@@ -650,6 +650,35 @@ app.get('/work/list', async (req, res) => {
   }
 });
 
+app.get('/fav/list', async (req, res) => {
+  const { memberNum } = req.query;
+  try {
+    const result = await connection.execute(
+       `SELECT * FROM PR_FAV PF `
+      +`INNER JOIN PR_GENRE PG `
+      +`ON PF.GENRE_NUM = PG.GENRE_NUM `
+      +`WHERE MEMBER_NUM = ${memberNum}`
+    );
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        favList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
 
 
 

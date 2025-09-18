@@ -240,8 +240,32 @@
             width: 1500px;
             margin: 5px auto;
             border: 1px solid black;
-            display: grid;
         }
+        .bodyGrid{
+            display: grid;
+            grid-template-columns: 200px 200px 200px;  /* 열 3개, 각 200px */
+            grid-template-rows: 150px 150px 150px;     /* 행 3개, 각 150px */
+            grid-template-areas:
+                "one one two"
+                "three three two"
+                "three three four";
+            gap: 5px;
+            width: 610px;   /* 200*3 + gap(5*2) */
+            margin: 20px auto;
+            background: #ddd;
+        }
+        .itemBox {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        }
+        .item1 { grid-area: one;   background: #e74c3c; }
+        .item2 { grid-area: two;   background: #3498db; }
+        .item3 { grid-area: three; background: #2ecc71; }
+        .item4 { grid-area: four;  background: #9b59b6; }
 
     </style>
 </head>
@@ -382,7 +406,12 @@
                     </div>
                 </div>
                 <div class="bodyMain">
-
+                    <div class="bodyGrid">
+                        <div class="itemBox item1">1</div>
+                        <div class="itemBox item2">2</div>
+                        <div class="itemBox item3">3</div>
+                        <div class="itemBox item4">4</div>
+                    </div>
                 </div>
                 
             </div>

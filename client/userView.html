@@ -6,6 +6,7 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <!-- VUE 문법을 사용하려면 이게 필수 -->
          <!-- $가 붙으면 JQUERY -->
     <style>
@@ -238,6 +239,9 @@
         .logoA{
             text-decoration: none;
         }
+        .bodyMain{
+            padding: 5px;
+        }
 
     </style>
 </head>
@@ -378,22 +382,28 @@
                     </div>
                 </div>
                 
-                <div class="userPage">
-                    <div v-if="list.length > 0">
-                        {{ list[0].NICKNAME }}
+                <div class="bodyMain">
+                    <div class="userPage">
+                        <div v-if="list.length > 0">
+                            닉네임 : {{ list[0].NICKNAME }}
+                        </div>
+                        <div v-if="list.length > 0">
+                            이름 : {{ list[0].MEMBER_NAME }}
+                        </div>
+                        <div v-if="list.length > 0">
+                            생년월일 : {{ list[0].FORMATTED_BIRTH }}
+                        </div>
+                        <div v-if="list.length > 0">
+                            이메일 : {{ list[0].EMAIL }}
+                        </div>
+                        <div v-if="list.length > 0">
+                            번호 : {{ list[0].PHONE }}
+                        </div>
                     </div>
-                    <div v-if="list.length > 0">
-                        {{ list[0].MEMBER_NAME }}
-                    </div>
-                    <div v-if="list.length > 0">
-                        {{ list[0].FORMATTED_BIRTH }}
-                    </div>
-                    <div v-if="list.length > 0">
-                        {{ list[0].EMAIL }}
-                    </div>
-                    <div v-if="list.length > 0">
-                        {{ list[0].PHONE }}
-                    </div>
+
+                    <div id="chart"></div>
+
+                    {{favList}}
                 </div>
             
                 
@@ -432,7 +442,43 @@
 
                 typeOption : [],
                 typeList : [],
-                typePick : "책"
+                typePick : "책",
+
+                
+                favList : [],
+                seriesData : [],
+                categories : [],
+
+                options : {
+                    series: [{
+                        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                        // data : []
+                        }],
+                    chart: {
+                        type: 'bar',
+                        height: 350
+                        },
+                        plotOptions: {
+                        bar: {
+                            borderRadius: 4,
+                            borderRadiusApplication: 'end',
+                            horizontal: true,
+                        }
+                    },
+                    dataLabels: {
+                        enabled: false
+                    },
+                    xaxis: {
+                    categories: [
+                        'South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
+                        'United States', 'China', 'Germany', '123', '1234'
+                        
+                    ],  
+                    min: 0,        // x축 최소값
+                    max: 10,       // x축 최대값
+                    tickAmount: 10 // 눈금 개수
+                    }
+                }
             };
         },
         methods: {
@@ -649,6 +695,33 @@
                         console.log(self.list[0].NICKNAME)
                     }
                 });
+            },
+
+            fnFavList : function(memberNum) {
+                let self = this;
+                let param = {
+                    memberNum : self.memberNum
+                };
+                $.ajax({
+                    url: "http://localhost:3009/fav/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.favList);
+                        self.favList = data.favList;
+                        // console.log(self.favList.length);
+
+                        let seriesData = self.favList.map(item=>item.GENRE_FAV);
+                        console.log(seriesData);
+                        
+                        let categories = self.favList.map(item=>item.GENRE_NAME);
+                        console.log(categories);
+
+                        // self.options.series = [{ data: self.seriesData }];
+                        // self.options.xaxis.categories = self.categories;
+                    }
+                });
             }
         }, // methods
         mounted() {
@@ -673,6 +746,11 @@
             self.fnCountryList();
             self.fnTransList();
             self.fnTypeList();
+
+            self.fnFavList(self.memberNum);
+
+            var chart = new ApexCharts(document.querySelector("#chart"), self.options);
+            chart.render();
         }
     });
 
