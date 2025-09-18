@@ -192,15 +192,15 @@ app.get('/member/list', async (req, res) => {
   }
 });
 
-app.get('/member/signin', async (req, res) => {
-  const { userName, userBirth, userPhone, userEmail, userId, userPwd } = req.query;
+app.get('/member/signUp', async (req, res) => {
+  const { userName, userBirth, userPhone, userEmail, userId, userPwd, userNickname } = req.query;
 
   console.log(userName);
   // console.log(userGenre);
 
   let query=
-    `INSERT INTO PR_MEMBER(MEMBER_NUM, MEMBER_NAME, BIRTH, PHONE, EMAIL, ID, PASSWORD, STATUS_CODE) `
-  + `VALUES (PR_M_SEQ.NEXTVAL, :userName, TO_DATE(:userBirth, 'YYYYMMDD'), :userPhone, :userEmail, :userId, :userPwd, 9) `;
+    `INSERT INTO PR_MEMBER(MEMBER_NUM, MEMBER_NAME, BIRTH, PHONE, EMAIL, ID, PASSWORD, NICKNAME, STATUS_CODE) `
+  + `VALUES (PR_M_SEQ.NEXTVAL, :userName, TO_DATE(:userBirth, 'YYYYMMDD'), :userPhone, :userEmail, :userId, :userPwd, :userNickname, 9) `;
   // + `RETURNING MEMBER_NUM INTO :membernum`;
   
   console.log(query);
@@ -209,8 +209,8 @@ app.get('/member/signin', async (req, res) => {
     await connection.execute(
       query,
     
-      [userName, userBirth, userPhone, userEmail, userId, userPwd],
-      { autoCommit: false }
+      [userName, userBirth, userPhone, userEmail, userId, userPwd, userNickname],
+      { autoCommit: true }
     );
   
   console.log(userName)
@@ -219,6 +219,7 @@ app.get('/member/signin', async (req, res) => {
   console.log(userEmail)
   console.log(userId)
   console.log(userPwd)
+  console.log(userNickname)
     
 
     res.json({
@@ -542,13 +543,21 @@ app.get('/board/insert', async (req, res) => {
 });
 
 app.get('/board/list', async (req, res) => {
-  const {  } = req.query;
+  const { boardNum } = req.query;
+  let query = ``;
+  // console.log(boardNum);
+  if(boardNum != null || boardNum != undefined){
+    query = `WHERE BOARD_NUM = ` + boardNum + ` `;
+    // console.log(query);
+  }
   
   try {
     const result = await connection.execute(
       `SELECT * FROM PR_BOARD PB `
     + `INNER JOIN PR_BOARD_KIND PBK `
-    + `ON PB.BOARD_CODE = PBK.BOARD_CODE ORDER BY BOARD_NUM DESC`);
+    + `ON PB.BOARD_CODE = PBK.BOARD_CODE `
+    +  query
+    + `ORDER BY BOARD_NUM DESC`);
     const columnNames = result.metaData.map(column => column.name);
     // 쿼리 결과를 JSON 형태로 변환
     const rows = result.rows.map(row => {
@@ -562,6 +571,78 @@ app.get('/board/list', async (req, res) => {
     res.json({
         result : "success",
         boardList : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
+app.get('/work/list', async (req, res) => {
+  const { typeNum, offset, pageSize } = req.query;
+  /*
+  typeNum
+  0=전체 작품
+  1=서적
+  2=e북
+  3=웹툰
+  4=웹소설
+  */
+  let query = "";
+  if(typeNum == 0){
+    query = "";
+  }
+  if(typeNum == 1){
+    query = `WHERE TYPE_NUM = 1 `;
+  }
+  if(typeNum == 2){
+    query = `WHERE TYPE_NUM = 2 `;
+  }
+  if(typeNum == 3){
+    query = `WHERE TYPE_NUM = 3 `;
+  }
+  if(typeNum == 4){
+    query = `WHERE TYPE_NUM = 4 `;
+  }
+
+  try {
+    const result = await connection.execute(
+      `SELECT * `
+    + `FROM PR_WORK PWK `
+    + `LEFT JOIN PR_CATEGORY PCG `
+    + `ON PWK.CATEGORY_NUM = PCG.CATEGORY_NUM `
+    + `LEFT JOIN PR_WRITER PWR `
+    + `ON PWK.WRITER_NUM = PWR.WRITER_NUM `
+    + `LEFT JOIN PR_PUBLISHER PP `
+    + `ON PWK.PUBLISHER_NUM = PP.PUBLISHER_NUM `
+    + `LEFT JOIN PR_COUNTRY PCT `
+    + `ON PWK.COUNTRY_NUM = PCT.COUNTRY_NUM `
+    + `LEFT JOIN PR_TRANSLATED PTS `
+    + `ON PWK.TRANSLATED_CODE = PTS.TRANSLATED_CODE `
+    +  query
+    + `OFFSET ${offset} ROWS FETCH NEXT ${pageSize} ROWS ONLY`
+    );
+    console.log(result);
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    
+    const count = await connection.execute(
+      `SELECT COUNT(*) FROM PR_WORK ` + query
+    );
+
+
+    res.json({
+        result : "success",
+        list : rows,
+        count : count.rows[0][0]
     });
   } catch (error) {
     console.error('Error executing query', error);

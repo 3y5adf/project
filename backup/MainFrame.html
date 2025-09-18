@@ -361,10 +361,10 @@
         
             <div class="bodyBox">
                 <div class="menu">
-                    <div @click="fnAll(0)" class="menuBar">
+                    <div @click="fnAll" class="menuBar">
                         통합
                     </div>
-                    <div @click="fnBook(1)" class="menuBar menu1">
+                    <div @click="fnBook" class="menuBar menu1">
                         서적
                     </div>
                     <div @click="fnWebTB" class="menuBar menu2">
@@ -449,12 +449,8 @@
                 location.href="Main-webTB.html"
             },
 
-            fnAll: function (typeNum) {
-                location.href="Main-book.html?typeNum="+typeNum;
-            },
-
-            fnBook: function (typeNum) {
-                location.href="Main-book.html?typeNum="+typeNum;
+            fnBook: function () {
+                location.href="Main-book.html"
             },
 
             fnSignUp: function () {

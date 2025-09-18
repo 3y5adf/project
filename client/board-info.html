@@ -97,6 +97,107 @@
             text-decoration: none;
             color: black;
         }
+        .bodyMain{
+            padding: 5px;
+            width: 1000px;
+            margin: 10px auto;
+            box-sizing: border-box;
+        }
+        .bodyMain table{
+            
+        }
+        .box{
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        
+        .boardTest{
+            width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .boardKind{
+            margin-left: 3px;
+            text-align: left;
+            font-size: 12px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+        .boardTitle{
+            text-align: left;
+            width: 100%;
+            font-size: 25px;
+        }
+        .boardNickname{
+            text-align: left;
+            
+            margin-left: 3px;
+            display: inline-block;
+        }
+        .boardContents{
+            width: 900px;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 50px;
+            min-height: 200px;
+        }
+        .ctFv{
+            text-align: center;
+        }
+        .boardLikes{
+            display: inline-block;
+            margin-right: 5px;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .boardVcnt{
+            display: inline-block;
+            margin-right: 5px;
+            float: right;
+        }
+        .nickView{
+            font-size: 15px;
+        }
+        .commentBox{
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .commentBox .box{
+            display: flex;
+            justify-content: right;
+        }
+        .commentInput{
+            display: flex;
+            justify-content: left;
+            margin-right: auto;
+        }
+        .commentInput textarea{
+            width: 700px;
+        }
+        .commentInsert{
+            cursor: pointer;
+        }
+        .likesBtn{
+            text-decoration: none;
+            color: black;
+        }
+        .likesBtn:hover .likes{
+            color: red;
+        }
+        .boardQA{
+            text-decoration: none;
+            color: black;
+        }
+        .boardQA:hover {
+            cursor: pointer;
+            color: blue;
+        }
     </style>
 </head>
 <body style="background-color: rgb(35, 35, 35);">
@@ -110,7 +211,7 @@
                 </div>
 
                 <div class="menuLine">
-                    <a href="">
+                    <a href="javascript:;" @click="fnBoardHome">
                         <div class="menu">
                             전체글
                         </div>
@@ -125,11 +226,10 @@
                             자유게시판
                         </div>
                     </a>
-                    <a href="">
-                        <div class="menu">
-                            문의게시판
-                        </div>
-                    </a>
+                    <div class="menu">
+                        문의게시판
+                    </div>
+                    
                     <a href="">
                         <div class="menu">
                             정보게시판
@@ -138,7 +238,51 @@
                 </div>
             </div>
             <div class="body">
-                board-info, boardNum={{boardNum}}
+                <div class="bodyMain">
+                    <div class="box boardTest">
+                        <a class="boardQA" href="javascript:;">
+                            <div class="boardKind box">
+                                {{boardList.BOARD_KIND}}
+                            </div>
+                        </a>
+                        <div class="boardTitle">
+                            {{boardList.BOARD_TITLE}}
+                        </div>
+                        <hr>
+                        <div class="nickView">
+                            <div class="boardNickname">
+                                {{boardList.NICKNAME}}
+                            </div>
+                            <div class="boardVcnt">
+                                조회수 : {{boardList.VIEWCNT}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="boardContents">
+                            {{boardList.BOARD_CONTENTS}}
+                        </div>
+                        <div class="ctFv">
+                            <a class="likesBtn" href="javascript:;">
+                                <div class="boardLikes box">
+                                    <span class="likes">추천</span>
+                                    <div>{{boardList.BOARD_LIKES}}</div>
+                                </div>
+                            </a>
+                        </div>
+                        <hr>
+                        <div class="commentBox">
+                            <div class="box">
+
+                            </div>
+                            <div class="box">
+                                <div class="commentInput"><textarea name="" id=""></textarea></div>
+                                <div class="commentInsert box">입력</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
             </div>
 
             
@@ -185,23 +329,32 @@
                 // console.log(id);
             },
 
-            fnBoardList : function () {
+            fnBoardList : function (boardNum) {
                 let self = this;
-                let param = {};
+                let param = {
+                    boardNum : self.boardNum
+                };
+                console.log(param);
                 $.ajax({
                     url: "http://localhost:3009/board/list",
                     dataType: "json",
                     type: "GET",
                     data: param,
                     success: function (data) {
-                        console.log(data.boardList);
-                        self.boardList = data.boardList;
+                        console.log(data.boardList[0]);
+                        self.boardList = data.boardList[0];
+                        // console.log(self.boardList.BOARD_KIND)
+                        // alert("성공!");
                     }
                 });
             },
 
             fnBoardInfo : function(boardNum) {
                 location.href="board-info.html?boardNum="+boardNum;
+            },
+
+            fnBoardHome : function () {
+                location.href="board.html";
             }
         }, // methods
         mounted() {
@@ -215,10 +368,11 @@
 
             console.log(self.userId);
             console.log(self.userStatus);
-            self.fnBoardList();
 
             const queryParams = new URLSearchParams(window.location.search);
             self.boardNum = queryParams.get('boardNum') || ''; 
+            
+            self.fnBoardList(self.boardNum);
         }
     });
 

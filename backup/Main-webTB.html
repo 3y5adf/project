@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <!-- VUE 문법을 사용하려면 이게 필수 -->
+         <!-- $가 붙으면 JQUERY -->
+    <style>
+        table, tr, td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+            text-align: center;
+        }
+        th{
+            background-color: beige;
+        }
+        td{
+            width: 800px;
+        }
+        tr:nth-child(even){
+            background-color: azure;
+        }
+        tr:nth-child(odd){
+            background-color: bisque;
+        }
+        #container{
+            width: 1000px;
+            margin: 10px auto;
+        }
+        .head{
+            width: 100%;
+            height: 100px;
+        }
+        .body{
+            width: 100%;
+            margin-top: 20px;
+            
+        }
+        .box{
+            border: 1px solid white;
+        }
+        .thumbnail{
+            width: 150px;
+            height: 200px;
+            display: inline-block;
+            background-size: cover;
+        }
+        .explain{
+            height: 200px;
+            display: inline-block;
+            color: white;
+            padding-left: 20px;
+        }
+        .thumbNailExplain{
+            display: flex; 
+            align-items: stretch;
+        }
+        .leftHead{
+            float: left;
+            width: 200px;
+            height: 50px;
+            margin-left: 50px;
+            margin-top: 20px;
+        }
+        .rightHead{
+            float: right;
+            width: 200px;
+            height: 50px;
+            margin-right: 50px;
+            margin-top: 20px;
+        }
+        .txtCenter{
+            text-align: center;
+        }
+        #head button{
+            margin-top: 20px;
+            margin-left: 200px;
+        }
+        .txtLeft{
+            text-align: left;
+        }
+    </style>
+</head>
+<body style="background-color: rgb(35, 35, 35);">
+    <div>
+        <div id="app">
+            <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+            <div id="container">
+                <div id="head" class="head box">
+                    <!-- <div class="explain leftHead box txtCenter">
+                        웹툰
+                    </div> -->
+                    <button @click="fnHome">home</button>
+                    <!-- <div class="explain rightHead box txtCenter">
+                        웹소설
+                    </div> -->
+                </div>
+                <div class="body box">
+                    <!-- <div class="thumbNailExplain">
+                        <a href="https://comic.naver.com/webtoon/list?titleId=183559">
+                            <div class="thumbnail box" style="background-image: url(../media/신의\ 탑.webp);"></div>
+                        </a>
+                        
+                        <div class="box explain">
+                            #판타지 #액션
+                            <br>
+                            abc
+                        </div>
+                    </div> -->
+                    <!-- <table>
+                        <tr>
+                            <th>
+                                <a href="https://comic.naver.com/webtoon/list?titleId=183559">
+                                    <div  class="thumbnail" style="background-image: url(../media/신의\ 탑.webp);"></div>
+                                </a>
+                            </th>
+                            
+                            <td  class="box explain" style="color: black;">
+                                #판타지 #액션
+                                <br>
+                                <div class="txtLeft">
+                                    할거 : 우측 상단에 웹툰/웹소설 버튼. 누르면 웹툰/웹소설 번갈아가며 바뀌는 식. 좌측 상단에 홈버튼. 중앙 상단에 상표같은거. 상표는 bookey,
+                                    테이블에 임시 목록 채워놓기
+                                </div>
+                            </td>
+                        </tr>
+                    </table> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                    // 변수 선언 부분
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+                // 함수는 여기서만
+            fnList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+
+                    }
+                });
+            },
+
+            fnHome : function () {
+                location.href="Main.html";
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+        }
+    });
+
+    app.mount('#app');
+</script>

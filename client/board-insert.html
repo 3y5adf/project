@@ -21,44 +21,249 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        #container {
+            width: 100%;
+            margin: 10px auto;
+        }
+        /* .tempBox{
+            border: 1px solid black;
+        } */
+
+        .head{
+            position: relative;
+            background-color: darkgray;
+            border-radius: 10px;
+        }
+
+        .main-menu{
+            background-color: darkblue;
+            color: white;
+            padding: 10px;
+            width: 150px;
+            box-sizing: border-box;
+            cursor: pointer;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .sub-menu{
+            background-color: rgb(188, 255, 233);
+            width: 150px;
+            box-shadow: 2px 2px 2px rgb(188, 255, 233);
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+        }
+        .sub-menu a{/* sub-menu 밑에 있는 a태그에만 적용 */
+            display: block;
+            padding: 10px;
+            cursor: pointer; /* 마우스를 갖다대면, 커서가 손모양으로 바뀜 */
+            text-decoration: none;
+        }
+        .head:hover .sub-menu{
+            display: block;
+        }
+        .sub-menu a:hover{
+            background-color: rgb(83, 254, 197);
+        }
+        .top-menu{
+            display: inline-block;
+        }
+        .logo{
+            display: inline;
+            color: white;
+            margin: 10px;
+        }
+        .sign{
+            text-align: center;
+        }
+        .sign button{
+            /* width: 200px;
+            height: 50px;
+            margin: 10px;
+            font-size: 25px;
+            border-radius: 10px; */
+        }
+        .sign button:hover{
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+            color: white;
+            cursor: pointer;
+        }
+        .menu{
+            display: inline-block;
+            padding: 5px;
+            text-decoration: none;
+            color: black;
+            border-radius: 10px;
+        }
+        .menu:hover{
+            background-color: gray;
+            cursor: pointer;
+            color: white;
+        }
+        .body{
+            background-color: white;
+        }
+        .topLine{
+            display: inline-block;
+            cursor: pointer;
+        }
+        .boardTitle{
+            text-decoration: none;
+            color: black;
+        }
+        .sign{
+            text-align: center;
+        }
+        .info{
+            display: inline;
+            float: right;
+            margin: 5px;
+        }
+        .info button{
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        .nickname{
+            text-decoration: none;
+            color: black;
+        }
+        .nickname:hover{
+            color:bisque
+        }
+        .userCont{
+            margin-right: 10px;
+        }
+        .logoA{
+            text-decoration: none;
+        }
+        .bodyMain{
+            padding: 5px;
+        }
     </style>
 </head>
-<body>
+<body style="background-color: rgb(35, 35, 35);">
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
-        <table>
-            <tr>
-                <th>제목</th>
-                <td>
-                    <input type="text" v-model="boardTitle">
-                </td>
-            </tr>
-            <tr>
-                <th>닉네임</th>
-                <td>
-                    {{memberInfo.NICKNAME}}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    게시판
-                </th>
-                <td>
-                    <select name="" id="" v-model="kindSelect" @change="fnKindPick(kindSelect)">
-                        <option :value="item.BOARD_KIND"  v-for="item in kindList">{{item.BOARD_KIND}}</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    내용
-                </th>
-                <td>
-                    <textarea name="" id="" v-model="boardContents"></textarea>
-                </td>
-            </tr>
-        </table>
-        <button @click="fnWrite">작성</button>
+        <div id="container">
+            <div class="head">
+                
+                <div class="topLine" @click="fnHome">
+                    <a class="logoA" href="Main.html">
+                        <span>
+                            <h2 class="logo">bookey</h2>
+                        </span>
+                    </a>
+                </div>
+
+                <span>
+                    <span class="sign info" v-if="userId.length==0">
+                        <button @click="fnSignUp">회원가입</button>
+                        <button @click="fnLogin">로그인</button>
+                    </span>
+                    <span class="sign" v-if="userId.length!=0">
+                        <span class="info">
+                            <span class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
+                                <!-- status_code가 관리자인 경우에만 회원 관리 가능하도록 수정하기. -->
+                                <button @click="fnManage" class="userCont">유저 관리</button>
+                            </span>
+                            <span style="color: black;">
+                                <a class="nickname" href="javascript:;" @click="fnView(list[0].MEMBER_NUM)" v-if="list.length > 0">
+                                    {{list[0].NICKNAME}}
+                                </a> 님
+                            </span>
+                            <button class="logout" @click="fnLogout">로그아웃</button>
+                        </span>
+                    </span>
+                </span>
+
+                <div class="menuLine">
+                    <a href="javascript:;" @click="fnMenuAll">
+                        <div class="menu menuAll">
+                            전체글
+                        </div>
+                    </a>
+                    <a href="javascript:;" @click="fnMenuNotifi">
+                        <div class="menu menuNotifi">
+                            공지사항
+                        </div>
+                    </a>
+                    <a href="javascript:;" @click="fnMenuFree">
+                        <div class="menu menuFree">
+                            자유게시판
+                        </div>
+                    </a>
+                    <a href="javascript:;" @click="fnMenuQA">
+                        <div class="menu menuQA">
+                            문의게시판
+                        </div>
+                    </a>
+                    <a href="javascript:;" @click="fnMenuInfor">
+                        <div class="menu menuInfor">
+                            정보게시판
+                        </div>
+                    </a>
+                </div>
+                
+                
+                <!-- <div class="main-menu">Dropdown</div>
+                <div class="sub-menu">
+                    <a href="">Menu 1</a>
+                    <a href="">Menu 2</a>
+                    <a href="">Menu 3</a>
+                </div>
+                <div class="main-menu">Dropdown</div>
+                <div class="sub-menu">
+                    <a href="">Menu 1</a>
+                    <a href="">Menu 2</a>
+                    <a href="">Menu 3</a>
+                </div>
+                <div class="main-menu">Dropdown</div>
+                <div class="sub-menu">
+                    <a href="">Menu 1</a>
+                    <a href="">Menu 2</a>
+                    <a href="">Menu 3</a>
+                </div> -->
+            </div>
+            <div class="body">
+                <div class="bodyMain">
+                    <table>
+                        <tr>
+                            <th>제목</th>
+                            <td>
+                                <input type="text" v-model="boardTitle">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>닉네임</th>
+                            <td>
+                                {{memberInfo.NICKNAME}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                게시판
+                            </th>
+                            <td>
+                                <select name="" id="" v-model="kindSelect" @change="fnKindPick(kindSelect)">
+                                    <option :value="item.BOARD_KIND"  v-for="item in kindList">{{item.BOARD_KIND}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                내용
+                            </th>
+                            <td>
+                                <textarea name="" id="" v-model="boardContents"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    <button @click="fnWrite">작성</button>
+                </div>
+                
+            </div>
+        </div>
     </div>
 </body>
 </html>
@@ -69,6 +274,11 @@
             return {
                 // 변수 - (key : value)
                     // 변수 선언 부분
+                userId : "",
+                boardList : [],
+                userStatus : "",
+                list : "",
+
                 memberId : "",
                 memberNickname : "",
                 memberInfo : {},
@@ -95,6 +305,83 @@
 
                     }
                 });
+            },
+
+            fnHome : function () {
+                location.href="Main.html";
+            },
+
+            fnBoardInsert : function (id) {
+                if(id==null || id==""){
+                    alert("회원만 작성 가능합니다.");
+                    return;
+                }
+
+                location.href="board-insert.html?id="+id;
+                // console.log(id);
+            },
+
+            fnBoardList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/board/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data.boardList);
+                        self.boardList = data.boardList;
+                    }
+                });
+            },
+
+            fnBoardInfo : function(boardNum) {
+                location.href="board-info.html?boardNum="+boardNum;
+            },
+
+            fnSignUp: function () {
+                location.href="SignUp.html"
+            }, 
+
+            fnLogin: function () {
+                location.href="Login.html"
+            },
+
+	        fnManage : function () {
+                location.href="memberManage.html";
+            },
+
+        	fnView : function(MEMBER_NUM){
+                location.href="userView.html?memberNum="+MEMBER_NUM;
+            },
+
+            fnLoginMember: function (userId) {
+                let self = this;
+                let param = {
+                    userId : sessionStorage.getItem('userId')
+                };
+                $.ajax({
+                    url: "http://localhost:3009/member/loginUser",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data)
+                        self.list = data.list;
+                        console.log(self.list)
+                    }
+                });
+            },
+
+        	fnLogout : function () {
+                sessionStorage.removeItem('userId');
+                sessionStorage.removeItem('userStatus');
+                location.href="Main.html";
+            },
+
+            fnMenuAll : function () {
+                location.href="board.html";
             },
 
             fnMemberSearch : function (memberId) {
@@ -174,20 +461,24 @@
                     }
                 });
             }
-
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+
+            self.userId = sessionStorage.getItem('userId') || "";
+            self.userStatus = sessionStorage.getItem('userStatus') || "";
 
             const queryParams = new URLSearchParams(window.location.search);
             self.memberId = queryParams.get('id') || ''; 
 
             self.fnMemberSearch(self.memberId);
             self.fnKindList();
-            
-            console.log(self.kindSelect);
-            console.log(self.kindCode);
+
+            console.log(self.userId);
+            console.log(self.userStatus);
+            self.fnLoginMember();
+            self.fnBoardList();
         }
     });
 

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <!-- VUE 문법을 사용하려면 이게 필수 -->
+         <!-- $가 붙으면 JQUERY -->
+    <style>
+        table, tr, td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+            text-align: center;
+        }
+        th{
+            background-color: beige;
+        }
+        tr:nth-child(even){
+            background-color: azure;
+        }
+        .box{
+            border: 1px solid black;
+        }
+        .marginRight5px{
+            margin-right: 5px;
+        }
+        .marginTop5px{
+            margin-top: 5px;
+        }
+        .inlineBlock{
+            display: inline-block;
+        }
+        .searchElement{
+            vertical-align : top;
+        }
+        .selectPick{
+            width: 70px;
+        }
+        .checkPick{
+            width: 500px;
+        }
+        .genreCheck{
+            margin: 5px;
+            width: 110px;
+            vertical-align : top;
+        }
+        .categoryCheck{
+            margin-top: 5px;
+            width: 140px;
+            vertical-align : top;
+        }
+        .countrySelect{
+            vertical-align : top;
+        }
+        .translatedSelect{
+            vertical-align : top;
+        }
+        .typeSelect{
+            vertical-align : top;
+        }
+        .searchList{
+            margin: 10px;
+        }
+        input.fnGenreChecked> genreList {
+            border: 4px solid rgb(255, 242, 65);
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+
+        
+
+        <div>
+            <button @click="fnHome">home</button>
+        </div>
+        <!-- <div>
+            <div v-if="list.length > 0" v-for="item in list">
+                {{ item.GENRE_NAME }}
+            </div>
+        </div> -->
+        
+    </div>
+</body>
+</html>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                    // 변수 선언 부분
+                genreOption : [], //클라이언트에서 만든 리스트
+                genreList : [], //서버에서 오는 리스트
+
+                categoryOption : [], //클라이언트에서 만든 리스트
+                categoryList : [], //서버에서 오는 리스트
+
+                countryOption : [], //클라이언트에서 만든 리스트
+                countryList : [], //서버에서 오는 리스트
+                countryPick : "국내",
+
+                translatedOption : [],
+                translatedList : [],
+                translatedPick : "한국어 원작",
+
+                typeOption : [],
+                typeList : [],
+                typePick : "책"
+            };
+        },
+        
+        methods: {
+            // 함수(메소드) - (key : function())
+                // 함수는 여기서만
+            fnList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+
+                    }
+                });
+            },
+
+            fnGenreList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/genre/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.genreOption = data.genreList;
+                        // console.log(self.genreOption);
+                        // console.log(self.genreOption.length);
+                        // console.log(self.genreOption[0]);
+                        // console.log(self.genreOption[0].GENRE_NAME);
+                    }
+                });
+            },
+
+            fnCategoryList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/category/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.categoryOption = data.categoryList;
+                        // console.log(self.categoryOption);
+                        // console.log(self.categoryOption.length);
+                        // console.log(self.categoryOption[0]);
+                        // console.log(self.categoryOption[0].CATEGORY_NAME);
+                    }
+                });
+            },
+
+            fnCountryList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/country/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.list);
+                        self.countryOption = data.countryList;
+                        // console.log(self.countryOption);
+                        // console.log(self.countryOption.length);
+                        // console.log(self.countryOption[0]);
+                        // console.log(self.countryOption[0].COUNTRY_NAME);
+                    }
+                });
+            },
+
+            fnCountry:function (country){
+                console.log(country);
+            },
+
+            fnTransList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/translated/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data);
+                        // console.log(data.translatedList[0]);
+                        self.translatedOption = data.translatedList;
+                        // console.log(self.translatedOption);
+                        
+                    }
+                });
+            },
+
+            fnTranslated : function (translated) {
+                console.log(translated);
+            },
+
+            fnTypeList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/type/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.typeList);
+                        self.typeOption = data.typeList;
+                        
+                    }
+                });
+            },
+
+            fnType : function (type) {
+                console.log(type);
+            },
+
+            fnHome : function () {
+                location.href="Main.html";
+            },
+
+            fnSearch : function() {
+                let self = this;
+                // console.log(self.genreList);
+                // console.log(self.categoryList);
+                // console.log(self.countryPick);
+                // console.log(self.translatedPick);
+                // console.log(self.typePick);
+                let param = {
+                    genreCheck : self.genreList,
+                    categoryCheck : self.categoryList,
+                    countryCheck : self.countryPick,
+                    translatedCheck : self.translatedPick,
+                    typeCheck : self.typePick
+                }
+                console.log(param);
+
+                // $.ajax({
+                //     url: "http://localhost:3009/search",
+                //     dataType: "json",
+                //     type: "GET",
+                //     data: param,
+                //     success: function (data) {
+                        
+                //     }
+                // });
+            }
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+            self.fnGenreList();
+            self.fnCategoryList();
+            self.fnCountryList();
+            self.fnTransList();
+            self.fnTypeList();
+        }
+    });
+
+    app.mount('#app');
+</script>

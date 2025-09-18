@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <!-- VUE 문법을 사용하려면 이게 필수 -->
+         <!-- $가 붙으면 JQUERY -->
+    <style>
+        table, tr, td, th{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px 10px;
+            text-align: center;
+        }
+        th{
+            background-color: beige;
+        }
+        tr:nth-child(even){
+            background-color: azure;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+        <table>
+            <tr>
+                <th>제목</th>
+                <td>
+                    <input type="text" v-model="boardTitle">
+                </td>
+            </tr>
+            <tr>
+                <th>닉네임</th>
+                <td>
+                    {{memberInfo.NICKNAME}}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    게시판
+                </th>
+                <td>
+                    <select name="" id="" v-model="kindSelect" @change="fnKindPick(kindSelect)">
+                        <option :value="item.BOARD_KIND"  v-for="item in kindList">{{item.BOARD_KIND}}</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    내용
+                </th>
+                <td>
+                    <textarea name="" id="" v-model="boardContents"></textarea>
+                </td>
+            </tr>
+        </table>
+        <button @click="fnWrite">작성</button>
+    </div>
+</body>
+</html>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                // 변수 - (key : value)
+                    // 변수 선언 부분
+                memberId : "",
+                memberNickname : "",
+                memberInfo : {},
+                kindList : [],
+                kindSelect : "자유게시판",
+                kindPick : "",
+                kindCode : "2",
+                boardTitle : "",
+                boardContents : ""
+            };
+        },
+        methods: {
+            // 함수(메소드) - (key : function())
+                // 함수는 여기서만
+            fnList: function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+
+                    }
+                });
+            },
+
+            fnMemberSearch : function (memberId) {
+                let self = this;
+                let param = {memberId};
+                $.ajax({
+                    url: "http://localhost:3009/board/memberSearch",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data.memberList[0]);
+                        self.memberInfo=data.memberList[0];
+                        console.log(self.memberInfo.NICKNAME);
+                        self.memberNickname=self.memberInfo.NICKNAME;
+                        self.memberId=self.memberInfo.ID;
+                    }
+                });
+            },
+
+            fnKindList : function () {
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "http://localhost:3009/boardKind/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data.kindList);
+                        self.kindList = data.kindList;
+                    }
+                });
+            },
+
+            fnKindPick : function (kindPick) {
+                let self = this;
+                let param = {kindPick};
+                // console.log(kindPick);
+                self.kindPick = kindPick;
+                $.ajax({
+                    url: "http://localhost:3009/boardKind/code",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.kindPick[0].BOARD_CODE);
+                        self.kindCode = data.kindPick[0].BOARD_CODE;
+                        console.log('분류 : ', kindPick);
+                        console.log('코드 : ', self.kindCode);
+                    }
+                });
+            },
+
+            fnWrite : function () {
+                let self = this;
+                // console.log(self.kindSelect);
+                // console.log(self.kindCode);
+                // console.log(self.boardTitle);
+                // console.log(self.boardContents);
+                let param = {
+                    kindCode : self.kindCode,
+                    boardTitle : self.boardTitle,
+                    boardContents : self.boardContents,
+                    memberNickname : self.memberNickname,
+                    memberId : self.memberId
+                };
+                console.log(param);
+                $.ajax({
+                    url: "http://localhost:3009/board/insert",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        alert("작성되었습니다.");
+                        location.href="board.html";
+                    }
+                });
+            }
+
+        }, // methods
+        mounted() {
+            // 처음 시작할 때 실행되는 부분
+            let self = this;
+
+            const queryParams = new URLSearchParams(window.location.search);
+            self.memberId = queryParams.get('id') || ''; 
+
+            self.fnMemberSearch(self.memberId);
+            self.fnKindList();
+            
+            console.log(self.kindSelect);
+            console.log(self.kindCode);
+        }
+    });
+
+    app.mount('#app');
+</script>

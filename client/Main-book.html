@@ -9,6 +9,235 @@
         <!-- VUE 문법을 사용하려면 이게 필수 -->
          <!-- $가 붙으면 JQUERY -->
     <style>
+        #header{
+            width: 100%;
+            height: 40px;
+            margin: 0px auto;
+            background-color: darkgray;
+            border-radius: 5px;
+            
+        }
+        #container{
+            width: 100%;
+            margin: 0px auto;
+        }
+        .box{
+            
+        }
+        
+        p{
+            font-size: 100px;
+            color: white;
+        }
+        .sign{
+            text-align: center;
+        }
+        .sign button{
+            /* width: 200px;
+            height: 50px;
+            margin: 10px;
+            font-size: 25px;
+            border-radius: 10px; */
+        }
+        .sign button:hover{
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+            color: white;
+            cursor: pointer;
+        }
+        .nickname{
+            text-decoration: none;
+            color: black;
+        }
+        .nickname:hover{
+            color:bisque
+        }
+        .adminOption button{
+            /* width: 100px;
+            height: 50px;
+            font-size: 20px; */
+        }
+        .info{
+            display: inline;
+            float: right;
+            margin: 5px;
+        }
+        .info button{
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        .logo{
+            display: inline;
+            color: white;
+            margin: 10px;
+        }
+        .bodyBox{
+            width: 100%;
+            height: 1000px;
+            background-color: white;
+            border-radius: 5px;
+        }
+        .userCont{
+            margin-right: 10px;
+        }
+        .menu{
+            background-color: darkgray;
+            width: 100%;
+            height: 30px;
+        }
+        
+        .menuBar{
+            width: 100px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: inline-block;
+            text-align: center;
+            float: left;
+            background-color: burlywood;
+        }
+        .menuBar:hover{
+            background-color: lightblue;
+            font-weight: bold;
+            border: 2px solid blue;
+        }
+        .menu1{
+            /* transform: translate(100px); */
+            background-color: rgb(236, 204, 163);
+        }
+        .menu2{
+            /* transform: translate(200px); */
+            background-color: rgb(243, 219, 187);
+        }
+        .menu3{
+            /* transform: translate(300px); */
+            background-color: rgb(240, 225, 206);
+        }
+        .menu4{
+            /* transform: translate(400px); */
+            background-color: rgb(245, 237, 226);
+        }
+        .tabMenu{
+            background-color: darkgray;
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            padding: 5px;
+            vertical-align: top;
+            text-align: center;
+            position: relative;
+        }
+        .tabMenu:hover{
+            background-color: gray;
+            cursor: pointer;
+            color: white;
+        }
+        .board{
+            text-decoration: none;
+            color: black;
+        }
+        .top-menu{
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+        }
+        .sub-menu{
+            width: 95px;
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+        }
+        .sub-menu a{
+            background-color: rgb(232, 232, 232);
+            display:block;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .sub-menu a:hover{
+            background-color: rgb(58, 58, 58);
+            color: white;
+        }
+        .boardMenu{
+            display: inline-block;
+        }
+        .boardMenu:hover .sub-menu{
+            display: block;
+        }
+        .searchMenu{
+            display: inline-block;
+        }
+        .searchPad{
+            width: 330px;
+            /* height: 150px; */
+            position: absolute;
+            top: 100%;
+            left: 0%;
+            background-color: rgb(232, 232, 232);
+        }
+        .searchGenre{
+            padding: 5px;
+            display: inline-block;
+            cursor: pointer;
+            
+        }
+        .searchGenre:hover{
+            background-color: beige;
+        }
+        .searchType{
+            padding: 5px;
+            display: inline-block;
+        }
+        .searchType:hover{
+            background-color: beige;
+        }
+        .searchType:hover .categoryList{
+            display: block;
+        }
+        .searchGenre:hover .genreList{
+            display: block;
+        }
+        .genreList{
+            position: absolute;
+            top: 25%;
+            left: 0%;
+            background-color: beige;
+            display: none;
+        }
+        .categoryList{
+            background-color: beige;
+            display: none;
+            position: absolute;
+            top: 25%;
+            left: 13.4%;
+        }
+        .inlineBlock{
+            display: inline-block;
+        }
+        .marginRight5px{
+            margin-right: 5px;
+        }
+        .checkPick{
+            width: 300px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+        }
+        .selectPick{
+            margin-left: 5px;
+            margin-bottom: 5px;
+            width: 70px;
+        }
+        .searchBtn{
+            margin-left: 25px;
+        }
+        .logoA{
+            text-decoration: none;
+        }
+        .bodyMain{
+            padding: 5px;
+        }
         table, tr, td, th{
             border: 1px solid black;
             border-collapse: collapse;
@@ -21,80 +250,231 @@
         tr:nth-child(even){
             background-color: azure;
         }
-        .box{
-            border: 1px solid black;
+        #pageSizeSelect{
+            margin-bottom: 10px;
+            margin-right: 10px;
         }
-        .marginRight5px{
-            margin-right: 5px;
+        .index{
+            margin-top: 10px;
+            margin-right: 10px;
+            text-decoration: none;
+            color: black;
         }
-        .marginTop5px{
-            margin-top: 5px;
+        td a{
+            text-decoration: none;
+            color: black;
         }
-        .inlineBlock{
-            display: inline-block;
-        }
-        .searchElement{
-            vertical-align : top;
-        }
-        .selectPick{
-            width: 70px;
-        }
-        .checkPick{
-            width: 500px;
-        }
-        .genreCheck{
-            margin: 5px;
-            width: 110px;
-            vertical-align : top;
-        }
-        .categoryCheck{
-            margin-top: 5px;
-            width: 140px;
-            vertical-align : top;
-        }
-        .countrySelect{
-            vertical-align : top;
-        }
-        .translatedSelect{
-            vertical-align : top;
-        }
-        .typeSelect{
-            vertical-align : top;
-        }
-        .searchList{
-            margin: 10px;
-        }
-        input.fnGenreChecked> genreList {
-            border: 4px solid rgb(255, 242, 65);
-            box-sizing: border-box;
-        }
+
     </style>
 </head>
-<body>
+<body style="background-color: rgb(35, 35, 35);">
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업해야 함(필수) -->
+        <div id="header">
+            <a class="logoA" href="Main.html">
+                <span>
+                    <h2 class="logo">bookey</h2>
+                </span>
+            </a>
+            <div class="top-menu">
+                <div class="searchMenu">
+                    <div class="tabMenu"  @click="fnToggle">검색</div>
+                    <div class="searchPad" v-show="searchVisible"  @click.stop>
 
-        
+                        <!-- 검색 누르면 펼쳐지는건 되지만, 장르,종류,select를 클릭했을 때
+                             검색이 클릭을 감지해서 접혀짐 -->
+                        <div class="searchGenre marginRight5px">
+                            장르
+                            <div class="genreList">
+                                <div v-if="genreOption.length > 0" v-for="item in genreOption">
+                                    <label>
+                                        
+                                        <!-- , {{item.GENRE_NUM}} -->
+                                        <input type="checkbox" v-model="genreList" :value="item.GENRE_NAME" :id="item.GENRE_NUM" >
+                                        {{ item.GENRE_NAME }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
 
-        <div>
-            <button @click="fnHome">home</button>
-        </div>
-        <!-- <div>
-            <div v-if="list.length > 0" v-for="item in list">
-                {{ item.GENRE_NAME }}
+                        <div class="searchType marginRight5px">
+                            종류
+                            <div class="categoryList">
+                                <div v-if="categoryOption.length > 0" v-for="item in categoryOption">
+                                    <label>
+                                
+                                        <!-- , {{item.CATEGORY_NUM}} -->
+                                        <input type="checkbox" v-model="categoryList" :value="item.CATEGORY_NAME" :id="item.CATEGORY_NUM">
+                                        {{ item.CATEGORY_NAME }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="inlineBlock marginRight5px">
+                            <select name="" v-model="countryPick" @change="fnCountry(countryPick)" >
+                                <option :value="item.COUNTRY_NAME"  v-if="countryOption.length > 0" v-for="item in countryOption">{{item.COUNTRY_NAME}}</option>
+                            </select>
+                        </div>
+
+                        <div class="inlineBlock marginRight5px">
+                            <select name="" v-model="translatedPick" @change="fnTranslated(translatedPick)">
+                                <option :value="item.TRANSLATED_STATUS"  v-if="translatedOption.length > 0" v-for="item in translatedOption">{{item.TRANSLATED_STATUS}}</option>
+                            </select>
+                        </div>
+
+                        <div class="inlineBlock">
+                            <select name="" v-model="typePick" @change="fnType(typePick)">
+                                <option :value="item.TYPE_NAME"  v-if="typeOption.length > 0" v-for="item in typeOption">{{item.TYPE_NAME}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="searchList">
+                            <input type="text" :value="genreList" class="checkPick" disabled>
+                            <br>
+                            <input type="text" :value="categoryList" class="checkPick" disabled>
+                            <br>
+                            <div class="marginTop5px">
+                                <input type="text" :value="countryPick" class="selectPick" disabled>
+                                <input type="text" :value="translatedPick" class="selectPick" disabled>
+                                <input type="text" :value="typePick" class="selectPick" disabled>
+                                <button @click="fnSearch" class="searchBtn">검색</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="sub-menu"></div>
+
+                <div class="boardMenu">
+                    <a href="board.html" class="board">
+                        <div class="tabMenu">
+                            게시판
+                        </div>
+                    </a>
+                    <div class="sub-menu">
+                        <a href="">공지사항</a>
+                        <a href="">자유게시판</a>
+                        <a href="">문의게시판</a>
+                        <a href="">정보게시판</a>
+                    </div>
+                </div>
             </div>
-        </div> -->
+
+            <span>
+                <span class="sign info" v-if="userId.length==0">
+                    <button @click="fnSignUp">회원가입</button>
+                    <button @click="fnLogin">로그인</button>
+                </span>
+                <span class="sign" v-if="userId.length!=0">
+                    <span class="info">
+                        <span class="adminOption" v-if="list.length > 0 && list[0].MEMBER_NUM == 1">
+                            <!-- status_code가 관리자인 경우에만 회원 관리 가능하도록 수정하기. -->
+                            <button @click="fnManage" class="userCont">유저 관리</button>
+                        </span>
+                        <span style="color: black;">
+                            <a class="nickname" href="javascript:;" @click="fnView(list[0].MEMBER_NUM)" v-if="list.length > 0">
+                                {{list[0].NICKNAME}}
+                            </a> 님
+                        </span>
+                        <button class="logout" @click="fnLogout">로그아웃</button>
+                    </span>
+                </span>
+            </span>
+        </div>
+        <div id="container">
         
+            <div class="bodyBox">
+                <div class="menu">
+                    <div @click="fnAll(0)" class="menuBar">
+                        통합
+                    </div>
+                    <div @click="fnBook(1)" class="menuBar menu1">
+                        서적
+                    </div>
+                    <div @click="fnWebTB(3)" class="menuBar menu2">
+                        웹툰
+                    </div>
+                    <div @click="fnPrepare(4)" class="menuBar menu3">
+                        웹소설
+                    </div>
+                    <div @click="fnPrepare(2)" class="menuBar menu4">
+                        E북
+                    </div>
+                </div>
+
+
+
+                <div class="bodyMain">
+                    <div v-if="workList.length == 0">
+                        준비중입니다.
+                    </div>
+
+                    <!-- 도서 리스트 -->
+                    <select name="" id="pageSizeSelect" v-model="pageSize" @change="fnWorkList">
+                        <option value="5">5개씩</option>
+                        <option value="10">10개씩</option>
+                        <option value="15">15개씩</option>
+                        <option value="20">20개씩</option>
+                    </select>
+                    
+                    <table>
+                        <tr>
+                            <th>제목</th>
+                            <th>작가</th>
+                            <th>출판사</th>
+                            <th>국가</th>
+                            <th>번역상태</th>
+                            <th>종류</th>
+                        </tr>
+                        <tr v-for="item in workList">
+                            <td>
+                                <a href="javascript:;" @click="fnWorkInfo(item.BOOK_NUM)">
+                                    {{item.BOOK_NAME}}
+                                </a>
+                            </td>
+                            <td>{{item.WRITER_NAME}}</td>
+                            <td>{{item.PUBLISHER_NAME}}</td>
+                            <td>{{item.COUNTRY_NAME}}</td>
+                            <td>{{item.TRANSLATED_STATUS}}</td>
+                            <td>{{item.CATEGORY_NAME}}</td>
+                        </tr>
+                    </table>
+                    <a class="index" href="javascript:;" v-for="num in index" @click="fnPageChange(num)">
+                        <span v-if="num == page" style="color: blue;">{{num}}</span>
+                        <span v-else>{{num}}</span>
+                    </a>                                                    
+                    
+
+                </div>
+            
+                
+            </div>
+        
+        </div>
     </div>
 </body>
 </html>
-
+<!-- a -->
 <script>
+
     const app = Vue.createApp({
         data() {
             return {
                 // 변수 - (key : value)
                     // 변수 선언 부분
+                userId : "",
+                list : [],
+                searchVisible : false,
+
+                workList : [],
+                pageSize : 5,
+                page : 1,
+                index : 0,
+
+                typeNum : "",
+                
                 genreOption : [], //클라이언트에서 만든 리스트
                 genreList : [], //서버에서 오는 리스트
 
@@ -114,23 +494,72 @@
                 typePick : "책"
             };
         },
-        
         methods: {
             // 함수(메소드) - (key : function())
                 // 함수는 여기서만
-            fnList: function () {
+            fnLoginMember: function (userId) {
                 let self = this;
-                let param = {};
+                let param = {
+                    userId : sessionStorage.getItem('userId')
+                };
                 $.ajax({
-                    url: "http://localhost:3009/",
+                    url: "http://localhost:3009/member/loginUser",
                     dataType: "json",
                     type: "GET",
                     data: param,
                     success: function (data) {
-
+                        console.log(data)
+                        self.list = data.list;
+                        console.log(self.list)
                     }
                 });
             },
+
+            fnPrepare : function () {
+                alert("준비중입니다.");
+            },
+
+            fnWebTB: function (typeNum) {
+                alert("준비중입니다.");
+                return;
+                location.href="Main-book.html?typeNum="+typeNum;
+            },
+
+            fnAll: function (typeNum) {
+                location.href="Main-book.html?typeNum="+typeNum;
+            },
+
+            fnBook: function (typeNum) {
+                location.href="Main-book.html?typeNum="+typeNum;
+            },
+
+            fnSignUp: function () {
+                location.href="SignUp.html"
+            }, 
+
+            fnLogin: function () {
+                location.href="Login.html"
+            },
+
+            fnView : function(MEMBER_NUM){
+                location.href="userView.html?memberNum="+MEMBER_NUM;
+            },
+
+            fnLogout : function () {
+                sessionStorage.removeItem('userId');
+                sessionStorage.removeItem('userStatus');
+                location.href="Main.html";
+            },
+
+            fnManage : function () {
+                location.href="memberManage.html";
+            },
+
+            fnToggle : function () {
+                let self = this;
+                self.searchVisible = !self.searchVisible;
+            },
+
 
             fnGenreList: function () {
                 let self = this;
@@ -235,11 +664,7 @@
                 console.log(type);
             },
 
-            fnHome : function () {
-                location.href="Main.html";
-            },
-
-            fnSearch : function() {
+            fnSearch : function(){
                 let self = this;
                 // console.log(self.genreList);
                 // console.log(self.categoryList);
@@ -253,22 +678,73 @@
                     translatedCheck : self.translatedPick,
                     typeCheck : self.typePick
                 }
-                console.log(param);
-
+                
+                location.href="searchResult.html";
+                // console.log(param);
                 // $.ajax({
-                //     url: "http://localhost:3009/search",
+                //     url: "http://localhost:3009/",
                 //     dataType: "json",
                 //     type: "GET",
                 //     data: param,
                 //     success: function (data) {
-                        
+                //         location
                 //     }
                 // });
+            },
+
+            fnWorkList: function (typeNum) {
+                let self = this;
+                let param = {
+                    typeNum : self.typeNum,
+                    pageSize : self.pageSize,
+                    offset : (self.page-1)*self.pageSize //일단은 0
+                };
+                console.log('typeNum : ',param.typeNum);
+                $.ajax({
+                    url: "http://localhost:3009/work/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.count);
+                        console.log(self.pageSize);
+                        console.log(Math.ceil(data.count/self.pageSize));
+                        self.workList = data.list;
+                        self.index = Math.ceil(data.count/self.pageSize);
+                        
+                    }
+                });
+            },
+
+            fnPageChange : function (num) {
+                let self = this;
+                self.page = num;
+                self.fnWorkList();
+            },
+
+            fnWorkInfo : function (num) {
+                let self = this;
+                location.href="workInfo.html?workNum="+num;
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+
+            self.userId = sessionStorage.getItem('userId') || "";
+            self.userStatus = sessionStorage.getItem('userStatus') || "";
+
+            self.fnLoginMember();
+
+            console.log(self.userId);
+            console.log(self.userStatus);
+
+            const queryParams = new URLSearchParams(window.location.search);
+            self.typeNum = queryParams.get('typeNum');
+
+            self.fnWorkList();
+
             self.fnGenreList();
             self.fnCategoryList();
             self.fnCountryList();
