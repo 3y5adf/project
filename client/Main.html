@@ -237,35 +237,40 @@
         }
         .bodyMain{
             padding: 5px;
-            width: 1500px;
+            width: 80%;
             margin: 5px auto;
             border: 1px solid black;
+            border-radius: 10px;
         }
         .bodyGrid{
             display: grid;
-            grid-template-columns: 200px 200px 200px;  /* 열 3개, 각 200px */
-            grid-template-rows: 150px 150px 150px;     /* 행 3개, 각 150px */
+            grid-template-columns: 1fr 1fr 1fr;  /* 열 3개, 각 200px */
+            grid-template-rows: repeat(3, minmax(200px, auto));     /* 행 3개, 각 150px */
             grid-template-areas:
                 "one one two"
                 "three three two"
                 "three three four";
             gap: 5px;
-            width: 610px;   /* 200*3 + gap(5*2) */
+            width: 81%;   /* 200*3 + gap(5*2) */
             margin: 20px auto;
-            background: #ddd;
+            background: white;
         }
         .itemBox {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 24px;
-        font-weight: bold;
-        color: white;
+                
+            display: flex;
+            border-radius: 10px;
+            /* align-items: center; */
+            /* justify-content: center; */
+            padding: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: black;
+            border: 1px solid black;
         }
-        .item1 { grid-area: one;   background: #e74c3c; }
-        .item2 { grid-area: two;   background: #3498db; }
-        .item3 { grid-area: three; background: #2ecc71; }
-        .item4 { grid-area: four;  background: #9b59b6; }
+        .item1 { grid-area: one;   background: white; }
+        .item2 { grid-area: two;   background: white; }
+        .item3 { grid-area: three; background: white; }
+        .item4 { grid-area: four;  background: white; }
 
     </style>
 </head>
@@ -356,10 +361,10 @@
                         </div>
                     </a>
                     <div class="sub-menu">
-                        <a href="">공지사항</a>
-                        <a href="">자유게시판</a>
-                        <a href="">문의게시판</a>
-                        <a href="">정보게시판</a>
+                        <a href="javascript:;">공지사항</a>
+                        <a href="javascript:;">자유게시판</a>
+                        <a href="javascript:;">문의게시판</a>
+                        <a href="javascript:;">정보게시판</a>
                     </div>
                 </div>
             </div>
@@ -407,10 +412,10 @@
                 </div>
                 <div class="bodyMain">
                     <div class="bodyGrid">
-                        <div class="itemBox item1">1</div>
-                        <div class="itemBox item2">2</div>
-                        <div class="itemBox item3">3</div>
-                        <div class="itemBox item4">4</div>
+                        <div class="itemBox item1">준비중입니다.</div>
+                        <div class="itemBox item2">준비중입니다.</div>
+                        <div class="itemBox item3">준비중입니다.</div>
+                        <div class="itemBox item4">준비중입니다.</div>
                     </div>
                 </div>
                 
@@ -448,7 +453,14 @@
 
                 typeOption : [],
                 typeList : [],
-                typePick : "책"
+                typePick : "책",
+
+                // genreSess : {},
+                // categorySess : {},
+                // countrySess : "",
+                // translatedSess : "",
+                // typeSess : ""
+
             };
         },
         methods: {
@@ -529,6 +541,7 @@
                     success: function (data) {
                         // console.log(data.list);
                         self.genreOption = data.genreList;
+                        console.log(data);
                         // console.log(self.genreOption);
                         // console.log(self.genreOption.length);
                         // console.log(self.genreOption[0]);
@@ -628,15 +641,34 @@
                 // console.log(self.countryPick);
                 // console.log(self.translatedPick);
                 // console.log(self.typePick);
-                let param = {
-                    genreCheck : self.genreList,
-                    categoryCheck : self.categoryList,
-                    countryCheck : self.countryPick,
-                    translatedCheck : self.translatedPick,
-                    typeCheck : self.typePick
-                }
+                
+                let genreCheck = self.genreList;
+                let categoryCheck = self.categoryList;
+                let countryCheck = self.countryPick;
+                let translatedCheck = self.translatedPick;
+                let typeCheck = self.typePick;
+
+                console.log(genreCheck);
+                console.log(categoryCheck);
+                console.log(countryCheck);
+                console.log(translatedCheck);
+                console.log(typeCheck);
+
+                sessionStorage.setItem('genreSess', JSON.stringify(genreCheck));
+                sessionStorage.setItem('categorySess', JSON.stringify(categoryCheck));
+                sessionStorage.setItem('countrySess', countryCheck);
+                sessionStorage.setItem('translatedSess', translatedCheck);
+                sessionStorage.setItem('typeSess', typeCheck);
+
+                console.log(sessionStorage.getItem('genreSess'));  // genreSess의 값 확인
+                console.log(sessionStorage.getItem('categorySess'));  // categorySess의 값 확인
+                console.log(sessionStorage.getItem('countrySess'));  // countrySess의 값 확인
+                console.log(sessionStorage.getItem('translatedSess'));  // translatedSess의 값 확인
+                console.log(sessionStorage.getItem('typeSess'));  // typeSess의 값 확인
                 
                 location.href="searchResult.html";
+
+
                 // console.log(param);
                 // $.ajax({
                 //     url: "http://localhost:3009/",
@@ -670,6 +702,8 @@
             self.fnCountryList();
             self.fnTransList();
             self.fnTypeList();
+
+            
         }
     });
 

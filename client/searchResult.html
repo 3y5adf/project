@@ -361,10 +361,10 @@
         
             <div class="bodyBox">
                 <div class="menu">
-                    <div @click="fnAll" class="menuBar">
+                    <div @click="fnAll(0)" class="menuBar">
                         통합
                     </div>
-                    <div @click="fnBook" class="menuBar menu1">
+                    <div @click="fnBook(1)" class="menuBar menu1">
                         서적
                     </div>
                     <div @click="fnWebTB" class="menuBar menu2">
@@ -379,6 +379,31 @@
                 </div>
                 <div class="bodyMain">
                     searchResult
+                    <br>
+                    {{retrievedGenre}}
+                    {{retrievedGenre.length}}
+                    <br>
+                    {{retrievedCategory}}
+                    {{retrievedCategory.length}}
+                    <br>
+                    {{retrievedCountry}}
+                    {{retrievedCountry.length}}
+                    <br>
+                    {{retrievedTranslated}}
+                    {{retrievedTranslated.length}}
+                    <br>
+                    {{retrievedType}}
+                    {{retrievedType.length}}
+                    <br>
+                    
+                    <br>
+                    <input type="text" :value="retrievedGenre" disabled>
+                    <br>
+                    <input type="text" :value="retrievedCategory" disabled>
+                    <br>
+                    <input type="text" :value="retrievedCountry" disabled>
+                    <input type="text" :value="retrievedTranslated" disabled>
+                    <input type="text" :value="retrievedType" disabled>
                 </div>
                 
             </div>
@@ -415,7 +440,13 @@
 
                 typeOption : [],
                 typeList : [],
-                typePick : "책"
+                typePick : "책",
+
+                retrievedGenre : [],
+                retrievedCategory : [],
+                retrievedCountry : "",
+                retrievedTranslated : "",
+                retrievedType : ""
             };
         },
         methods: {
@@ -432,9 +463,9 @@
                     type: "GET",
                     data: param,
                     success: function (data) {
-                        console.log(data)
+                        // console.log(data)
                         self.list = data.list;
-                        console.log(self.list)
+                        // console.log(self.list)
                     }
                 });
             },
@@ -449,8 +480,12 @@
                 location.href="Main-webTB.html"
             },
 
-            fnBook: function () {
-                location.href="Main-book.html"
+            fnAll: function (typeNum) {
+                location.href="Main-book.html?typeNum="+typeNum;
+            },
+
+            fnBook: function (typeNum) {
+                location.href="Main-book.html?typeNum="+typeNum;
             },
 
             fnSignUp: function () {
@@ -610,10 +645,40 @@
                 //         location
                 //     }
                 // });
+            },
+
+            //여기선 param값이 잘나오는데, server.js로 넘기면 값이 안나옴
+            fnSearchResult : function () {
+                let self = this;
+                let param = {
+                    genreS : self.retrievedGenre,
+                    categoryS : self.retrievedCategory,
+                    countryS : self.retrievedCountry,
+                    translatedS : self.retrievedTranslated,
+                    typeS : self.fnTypeList
+                };
+                console.log(param);
+                $.ajax({
+                    url: "http://localhost:3009/workSearch/list",
+                    dataType: "json",
+                    type: "GET",
+                    data: param,
+                    success: function (data) {
+                        // console.log(data.typeList);
+                        // self.typeOption = data.typeList;
+                        console.log("Aaaaaaaaaaaa");
+                        
+                    }
+                });
             }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
+
+            alert("준비중입니다.");
+            location.href="Main.html";
+
+
             let self = this;
 
             self.userId = sessionStorage.getItem('userId') || "";
@@ -629,6 +694,19 @@
             self.fnCountryList();
             self.fnTransList();
             self.fnTypeList();
+
+            self.retrievedGenre = JSON.parse(sessionStorage.getItem('genreSess'));
+            self.retrievedCategory = JSON.parse(sessionStorage.getItem('categorySess'));
+            self.retrievedCountry = sessionStorage.getItem('countrySess');
+            self.retrievedTranslated = sessionStorage.getItem('translatedSess');
+            self.retrievedType = sessionStorage.getItem('typeSess');
+            console.log(self.retrievedGenre);
+            console.log(self.retrievedCategory);
+            console.log(self.retrievedCountry);
+            console.log(self.retrievedTranslated);
+            console.log(self.retrievedType);
+
+            // self.fnSearchResult();
         }
     });
 

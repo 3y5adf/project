@@ -332,10 +332,10 @@
                         </div>
                     </a>
                     <div class="sub-menu">
-                        <a href="">공지사항</a>
-                        <a href="">자유게시판</a>
-                        <a href="">문의게시판</a>
-                        <a href="">정보게시판</a>
+                        <a href="javascript:;">공지사항</a>
+                        <a href="javascript:;">자유게시판</a>
+                        <a href="javascript:;">문의게시판</a>
+                        <a href="javascript:;">정보게시판</a>
                     </div>
                 </div>
             </div>
@@ -401,9 +401,17 @@
                         </div>
                     </div>
 
-                    <div id="chart"></div>
+                    <div hidden>
+                        <div id="chart"></div>
+                        {{seriesData}}
+                        <hr>
+                        {{categories}}
+                        <hr>
+                        {{options.series}}
+                        <hr>
+                        {{options.xaxis.categories}}
+                    </div>
 
-                    {{favList}}
                 </div>
             
                 
@@ -451,8 +459,8 @@
 
                 options : {
                     series: [{
-                        data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-                        // data : []
+                        data: [1,0,3,4,5,6,7,8,9,10]
+                        // data : self.seriesData
                         }],
                     chart: {
                         type: 'bar',
@@ -469,14 +477,14 @@
                         enabled: false
                     },
                     xaxis: {
-                    categories: [
-                        'South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
-                        'United States', 'China', 'Germany', '123', '1234'
-                        
-                    ],  
-                    min: 0,        // x축 최소값
-                    max: 10,       // x축 최대값
-                    tickAmount: 10 // 눈금 개수
+                        categories: 
+                        // self.categories,
+                        [
+                           "a",'b','c','d','e','f','g','h','i','j'
+                        ],  
+                        min: 0,        // x축 최소값
+                        max: 10,       // x축 최대값
+                        tickAmount: 10 // 눈금 개수
                     }
                 }
             };
@@ -495,9 +503,9 @@
                     type: "GET",
                     data: param,
                     success: function (data) {
-                        console.log(data)
+                        // console.log(data)
                         self.list = data.list;
-                        console.log(self.list)
+                        // console.log(self.list)
                     }
                 });
             },
@@ -606,7 +614,7 @@
             },
 
             fnCountry:function (country){
-                console.log(country);
+                // console.log(country);
             },
 
             fnTransList : function () {
@@ -628,7 +636,7 @@
             },
 
             fnTranslated : function (translated) {
-                console.log(translated);
+                // console.log(translated);
             },
 
             fnTypeList : function () {
@@ -648,7 +656,7 @@
             },
 
             fnType : function (type) {
-                console.log(type);
+                // console.log(type);
             },
 
             fnSearch : function(){
@@ -690,9 +698,9 @@
                     type: "GET",
                     data: param,
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         self.list = data.list;
-                        console.log(self.list[0].NICKNAME)
+                        // console.log(self.list[0].NICKNAME)
                     }
                 });
             },
@@ -712,14 +720,18 @@
                         self.favList = data.favList;
                         // console.log(self.favList.length);
 
-                        let seriesData = self.favList.map(item=>item.GENRE_FAV);
-                        console.log(seriesData);
-                        
-                        let categories = self.favList.map(item=>item.GENRE_NAME);
-                        console.log(categories);
+                        // console.log(self.favList);
 
-                        // self.options.series = [{ data: self.seriesData }];
-                        // self.options.xaxis.categories = self.categories;
+                        self.seriesData = self.favList.map(item=>item.GENRE_FAV);
+                        // console.log(self.seriesData);
+                        
+                        self.categories = self.favList.map(item=>item.GENRE_NAME);
+                        // console.log(self.categories);
+
+                        self.options.series =   self.seriesData ;
+                        self.options.xaxis.categories = self.categories;
+
+                        
                     }
                 });
             }
@@ -741,16 +753,23 @@
             console.log(self.memberNum);
             self.fnView();
 
+            self.fnFavList(self.memberNum);
+            console.log(self.seriesData);
+            console.log(self.categories);
+
             self.fnGenreList();
             self.fnCategoryList();
             self.fnCountryList();
             self.fnTransList();
             self.fnTypeList();
 
-            self.fnFavList(self.memberNum);
-
             var chart = new ApexCharts(document.querySelector("#chart"), self.options);
             chart.render();
+
+            // self.fnFavList(self.memberNum);
+            
+            
+        
         }
     });
 

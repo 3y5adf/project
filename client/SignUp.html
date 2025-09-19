@@ -319,10 +319,10 @@
                         </div>
                     </a>
                     <div class="sub-menu">
-                        <a href="">공지사항</a>
-                        <a href="">자유게시판</a>
-                        <a href="">문의게시판</a>
-                        <a href="">정보게시판</a>
+                        <a href="javascript:;">공지사항</a>
+                        <a href="javascript:;">자유게시판</a>
+                        <a href="javascript:;">문의게시판</a>
+                        <a href="javascript:;">정보게시판</a>
                     </div>
                 </div>
             </div>
@@ -333,10 +333,10 @@
         
             <div class="bodyBox">
                 <div class="menu">
-                    <div @click="fnAll" class="menuBar">
+                    <div @click="fnAll(0)" class="menuBar">
                         통합
                     </div>
-                    <div @click="fnBook" class="menuBar menu1">
+                    <div @click="fnBook(1)" class="menuBar menu1">
                         서적
                     </div>
                     <div @click="fnWebTB" class="menuBar menu2">
@@ -474,8 +474,12 @@
                 location.href="Main-webTB.html"
             },
 
-            fnBook: function () {
-                location.href="Main-book.html"
+            fnAll: function (typeNum) {
+                location.href="Main-book.html?typeNum="+typeNum;
+            },
+
+            fnBook: function (typeNum) {
+                location.href="Main-book.html?typeNum="+typeNum;
             },
 
             fnToggle : function () {

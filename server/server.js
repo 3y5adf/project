@@ -679,6 +679,85 @@ app.get('/fav/list', async (req, res) => {
   }
 });
 
+app.get('/workSearch/list', async (req, res) => {
+  const { genreS, categoryS, countryS, translatedS, typeS } = req.query;
+  // let genreSar = Object.values(genreS);
+  // console.log(genreSar);
+  let query = ``;
+  // console.log(boardNum);
+  if(
+    genreS.length>0 || categoryS.length>0 
+    || countryS.length>0 || translatedS.length>0 || typeS.length>0
+  ){
+    query = `WHERE `;
+
+      if(genreS.length>0){
+        for(let i=0;i<genreS.length;i++){
+          if(i === genreS.length-1){
+            query += `GENRE_NAME LIKE '%${genreS[i]}%') `;
+          } else {
+            query += `(GENRE_NAME LIKE '%${genreS[i]}%' OR `;
+          }
+        }
+      }
+
+      if(categoryS.length>0){
+        if(genreS.length>0){
+          query += `AND `
+        }
+        for(let i=0;i<categoryS.length;i++){
+          if(i === categoryS.length-1){
+            query += `CATEGORY_NAME LIKE '%${categoryS[i]}%') `;
+          } else {
+            query += `(CATEGORY_NAME LIKE '%${categoryS[i]}%' OR `;
+          }
+        }
+      }
+
+      query += `AND COUNTRY_NAME LIKE '%${countryS}%' `; 
+      query += `AND TRANSLATED_STATUS LIKE '%${translatedS}%' `; 
+      query += `AND TYPE_NAME LIKE '%${typeS}%'`;
+  }
+  
+  //추가 보완 필요
+  try {
+    const result = await connection.execute(
+      `SELECT * `
+    + `FROM PR_WORK PW `
+    + `LEFT JOIN PR_COUNTRY PC `
+    + `ON PW.COUNTRY_NUM = PC.COUNTRY_NUM `
+    + `LEFT JOIN PR_WRITER PWT `
+    + `ON PW.WRITER_NUM = PWT.WRITER_NUM `
+    + `LEFT JOIN PR_PUBLISHER PP `
+    + `ON PW.PUBLISHER_NUM = PP.PUBLISHER_NUM `
+    + `LEFT JOIN PR_TRANSLATED PTS `
+    + `ON PW.TRANSLATED_CODE = PTS.TRANSLATED_CODE `
+    + `LEFT JOIN PR_TYPE PT `
+    + `ON PW.TYPE_NUM = PT.TYPE_NUM `
+    + `LEFT JOIN PR_CATEGORY PCG `
+    + `ON PW.CATEGORY_NUM = PC.CATEGORY_NUM `
+    +  query
+    );
+    const columnNames = result.metaData.map(column => column.name);
+    // 쿼리 결과를 JSON 형태로 변환
+    const rows = result.rows.map(row => {
+      // 각 행의 데이터를 컬럼명에 맞게 매핑하여 JSON 객체로 변환
+      const obj = {};
+      columnNames.forEach((columnName, index) => {
+        obj[columnName] = row[index];
+      });
+      return obj;
+    });
+    res.json({
+        result : "success",
+        searchResult : rows
+    });
+  } catch (error) {
+    console.error('Error executing query', error);
+    res.status(500).send('Error executing query');
+  }
+});
+
 
 
 
